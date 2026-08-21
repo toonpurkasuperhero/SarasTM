@@ -1,0 +1,117 @@
+[
+  {
+    "name": "Priya Devi",
+    "phone": "9876543210",
+    "region": "Bihar",
+    "language": "hi",
+    "products": [
+      {
+        "title": "Madhubani Peacock Dance Painting",
+        "story_en": "Painted by master artist Priya Devi from Mithila, Bihar, this Madhubani masterpiece captures the eternal dance of peacocks during the monsoon. Using only natural pigments derived from turmeric, indigo, and lac on handmade paper, this 2,000-year-old tradition lives through every brushstroke.",
+        "story_native": "मिथिला की मास्टर कलाकार प्रिया देवी द्वारा बनाई गई यह मधुबनी पेंटिंग मोरों के नृत्य को दर्शाती है।",
+        "seo_tags": ["madhubani painting", "mithila art", "bihar craft", "natural pigments", "handmade", "traditional art"],
+        "price_inr": 4500,
+        "price_usd": 54,
+        "price_eur": 50,
+        "price_gbp": 43,
+        "craft_type": "Madhubani",
+        "region_label": "Bihar",
+        "hsn_code": "97010000",
+        "hsn_confidence": "high",
+        "status": "published"
+      }
+    ]
+  },
+  {
+    "name": "Lakshmi Subramanian",
+    "phone": "9876543211",
+    "region": "Tamil Nadu",
+    "language": "ta",
+    "products": [
+      {
+        "title": "Kanchipuram Pure Silk Saree — Temple Border",
+        "story_en": "Woven over 10 days by master weaver Lakshmi Subramanian in Kanchipuram, Tamil Nadu, this silk saree features the iconic temple border pattern in 24-carat zari gold thread. Each thread is hand-twisted by her family in a tradition spanning five generations.",
+        "story_native": "கரகாட்டம் கோவில் எல்லை நூல் சேலை கைத்தறியில் நெய்யப்பட்டது।",
+        "seo_tags": ["kanchipuram silk", "silk saree", "temple border", "zari gold", "handwoven", "tamil Nadu"],
+        "price_inr": 18500,
+        "price_usd": 222,
+        "price_eur": 205,
+        "price_gbp": 175,
+        "craft_type": "Kanchipuram Silk",
+        "region_label": "Tamil Nadu",
+        "hsn_code": "50072000",
+        "hsn_confidence": "high",
+        "status": "published"
+      }
+    ]
+  },
+  {
+    "name": "Mohammad Yusuf",
+    "phone": "9876543212",
+    "region": "Jammu & Kashmir",
+    "language": "hi",
+    "products": [
+      {
+        "title": "Kashmiri Walnut Wood Carved Box — Chinar Leaf Motif",
+        "story_en": "Hand-carved from single-piece walnut grown in the Kashmir Valley, this decorative box features the chinar leaf motif that has symbolized Kashmir's cultural identity for centuries. Master craftsman Mohammad Yusuf spent 3 weeks creating this piece using traditional koftgari chiseling technique.",
+        "story_native": "कश्मीर घाटी के अखरोट की लकड़ी से हाथ से नक्काशी किया गया यह बक्सा चिनार पत्ती के डिज़ाइन से सजाया गया है।",
+        "seo_tags": ["kashmiri walnut wood", "hand carved", "chinar leaf", "kashmir craft", "decorative box", "wood carving"],
+        "price_inr": 8200,
+        "price_usd": 98,
+        "price_eur": 91,
+        "price_gbp": 78,
+        "craft_type": "Kashmiri Walnut Craft",
+        "region_label": "Jammu & Kashmir",
+        "hsn_code": "44219090",
+        "hsn_confidence": "high",
+        "status": "published"
+      }
+    ]
+  },
+  {
+    "name": "Sunita Prajapati",
+    "phone": "9876543213",
+    "region": "Rajasthan",
+    "language": "hi",
+    "products": [
+      {
+        "title": "Jaipur Blue Pottery Vase — Floral Garden Design",
+        "story_en": "Crafted using the rare quartz-based Jaipur blue pottery technique — not clay-based like other pottery — this vase by Sunita Prajapati features a hand-painted Persian floral garden in cobalt and turquoise. The 700-year-old craft was nearly extinct until revived by master craftswomen like Sunita.",
+        "story_native": "जयपुर ब्लू पॉटरी की दुर्लभ क्वार्ट्ज तकनीक से बना यह फूलदान हाथ से चित्रित फारसी फूल बाग के साथ सजाया गया है।",
+        "seo_tags": ["blue pottery", "jaipur craft", "quartz pottery", "hand painted", "rajasthan", "Persian design"],
+        "price_inr": 3200,
+        "price_usd": 38,
+        "price_eur": 35,
+        "price_gbp": 30,
+        "craft_type": "Blue Pottery",
+        "region_label": "Rajasthan",
+        "hsn_code": "69149000",
+        "hsn_confidence": "high",
+        "status": "published"
+      }
+    ]
+  },
+  {
+    "name": "Mangal Singh",
+    "phone": "9876543214",
+    "region": "Maharashtra",
+    "language": "mr",
+    "products": [
+      {
+        "title": "Warli Tribal Art — Village Life Cycle Canvas",
+        "story_en": "Painted by Warli tribal artist Mangal Singh from the foothills of the Sahyadri mountains in Maharashtra, this canvas depicts the eternal cycle of village life — harvest, dance, and community. The 3,000-year-old Warli tradition uses only white rice paste on terracotta-colored cloth, creating a living anthropological record.",
+        "story_native": "वारली आदिवासी कलाकार मंगल सिंह द्वारा सह्याद्री पर्वत की तलहटी से बनाया गया यह कैनवास ग्राम जीवन के शाश्वत चक्र को दर्शाता है।",
+        "seo_tags": ["warli art", "tribal painting", "maharashtra", "rice paste art", "village life", "indigenous art"],
+        "price_inr": 5500,
+        "price_usd": 66,
+        "price_eur": 61,
+        "price_gbp": 52,
+        "craft_type": "Warli Art",
+        "region_label": "Maharashtra",
+        "hsn_code": "97010000",
+        "hsn_confidence": "high",
+        "status": "published"
+      }
+    ]
+  }
+]

@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paytm-cyan: #00BAF2;
+  --paytm-navy: #002E6E;
+  --paytm-bg: #F5F8FC;
+  --paytm-green: #00A65A;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #F5F8FC;
+  color: #002E6E;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-paytm-cyan text-white font-semibold px-6 py-3 rounded-xl hover:bg-paytm-cyan-dark active:scale-95 transition-all duration-150 shadow-md disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-paytm-navy font-semibold px-6 py-3 rounded-xl border-2 border-paytm-navy hover:bg-paytm-bg active:scale-95 transition-all duration-150 disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply text-paytm-cyan font-semibold px-4 py-2 rounded-xl hover:bg-paytm-cyan/10 active:scale-95 transition-all duration-150;
+  }
+
+  .card {
+    @apply bg-white rounded-card shadow-card p-6;
+  }
+
+  .card-hover {
+    @apply card hover:shadow-card-hover transition-shadow duration-200 cursor-pointer;
+  }
+
+  .badge-cyan {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-paytm-cyan/15 text-paytm-cyan;
+  }
+
+  .badge-green {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-paytm-green/15 text-paytm-green;
+  }
+
+  .badge-navy {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border border-paytm-navy/30 text-paytm-navy;
+  }
+
+  .badge-orange {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-700;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-paytm-navy placeholder-gray-400 focus:outline-none focus:border-paytm-cyan focus:ring-2 focus:ring-paytm-cyan/20 transition-all duration-150;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-paytm-navy;
+  }
+
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e8ecf0 25%, #f5f8fc 50%, #e8ecf0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F8FC;
+}
+::-webkit-scrollbar-thumb {
+  background: #00BAF2;
+  border-radius: 3px;
+}
