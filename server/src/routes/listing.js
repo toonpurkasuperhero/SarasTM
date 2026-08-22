@@ -149,4 +149,39 @@ router.post('/:id/publish', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const artisanId = req.user?.id;
+
+    // Check if product exists and belongs to the user
+    const { data: product, error: fetchErr } = await supabase
+      .from('products')
+      .select('artisan_id')
+      .eq('id', id)
+      .single();
+
+    if (fetchErr) return res.status(404).json({ error: 'Product not found' });
+
+    if (artisanId && product.artisan_id !== artisanId) {
+      return res.status(403).json({ error: 'Unauthorized to delete this listing' });
+    }
+
+    // Delete dependent tables
+    await supabase.from('product_images').delete().eq('product_id', id);
+    await supabase.from('passports').delete().eq('product_id', id);
+
+    // Delete product
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    res.json({ success: true, message: 'Listing deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

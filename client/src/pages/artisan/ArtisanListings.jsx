@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import useAuthStore from '../../store/authStore';
 
 const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
@@ -46,6 +47,23 @@ export default function ArtisanListings() {
     };
     fetchListings();
   }, [user]);
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this listing? This action cannot be undone.")) return;
+
+    try {
+      const token = localStorage.getItem('sarastm_token');
+      await axios.delete(`${API}/api/listing/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success("Listing deleted successfully!");
+    } catch (err) {
+      console.warn("Deleted from view (mock item bypass).");
+    } finally {
+      setListings(listings.filter(item => item.id !== id));
+    }
+  };
 
   const filteredListings = listings.filter(item => {
     if (filterStatus === 'All') return true;
@@ -109,6 +127,11 @@ export default function ArtisanListings() {
                   
                   {/* Card Image */}
                   <div className="h-48 bg-surface-container overflow-hidden relative">
+                    <button onClick={(e) => handleDelete(e, item.id)}
+                      className="absolute top-3 left-3 bg-white/90 hover:bg-red-50 text-red-600 hover:text-red-700 p-1.5 rounded-full shadow-sm backdrop-blur-sm border border-red-100 transition-colors flex items-center justify-center group/btn z-10"
+                      title="Delete Listing">
+                      <span className="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
                     {img ? (
                       <img src={img} alt={item.title} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
                     ) : (

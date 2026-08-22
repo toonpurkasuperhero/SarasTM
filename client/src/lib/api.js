@@ -20,6 +20,7 @@ export const listingAPI = {
   publish: (id) => api.post(`/api/listing/${id}/publish`),
   getMyListings: () => api.get('/api/listing/my'),
   getReceivedOrders: () => api.get('/api/listing/orders/received'),
+  delete: (id) => api.delete(`/api/listing/${id}`),
 };
 
 export const imagesAPI = {
