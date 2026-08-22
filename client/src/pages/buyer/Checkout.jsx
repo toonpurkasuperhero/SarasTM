@@ -28,21 +28,32 @@ export default function Checkout() {
 
   const loadPaytmScript = () =>
     new Promise((resolve) => {
+      // Already loaded
       if (window.Paytm?.CheckoutJS) { resolve(true); return; }
+
       const existing = document.getElementById('paytm-checkout-js');
-      if (existing) { existing.remove(); }
+      if (existing) existing.remove();
 
       const script = document.createElement('script');
       script.id = 'paytm-checkout-js';
       script.type = 'application/javascript';
       script.src = `${PAYTM_STAGING_URL}/merchantpgpui/checkoutjs/merchants/${PAYTM_MID}.js`;
       script.crossOrigin = 'anonymous';
-      script.onload = () => {
-        if (window.Paytm?.CheckoutJS) resolve(true);
-        else resolve(false);
-      };
-      script.onerror = () => resolve(false);
       document.head.appendChild(script);
+
+      // Poll for CheckoutJS to become available (onLoad is unreliable on Paytm Blink SDK)
+      const start = Date.now();
+      const poll = setInterval(() => {
+        if (window.Paytm?.CheckoutJS) {
+          clearInterval(poll);
+          resolve(true);
+        } else if (Date.now() - start > 10000) {
+          clearInterval(poll);
+          resolve(false); // Timed out after 10s
+        }
+      }, 200);
+
+      script.onerror = () => { clearInterval(poll); resolve(false); };
     });
 
   const handleCheckout = async () => {
@@ -71,20 +82,27 @@ export default function Checkout() {
         await new Promise((resolve, reject) => {
           const config = {
             root: '',
-            style: { bodyBackgroundColor: '#fafafb', bodyColor: '', themeBackgroundColor: '#00BAF2', themeColor: '#ffffff', headerBackgroundColor: '#1a2e44', headerColor: '#ffffff', errorColor: '', successColor: '' },
+            style: {
+              bodyBackgroundColor: '#fafafb',
+              themeBackgroundColor: '#00BAF2',
+              themeColor: '#ffffff',
+              headerBackgroundColor: '#1a2e44',
+              headerColor: '#ffffff',
+            },
             data: {
               orderId,
               token: txnToken,
               tokenType: 'TXN_TOKEN',
               amount,
             },
-            payMode: { labels: {}, filter: { exclude: [] }, order: ['CC', 'DC', 'NB', 'UPI', 'PPBL', 'PPI', 'BALANCE'] },
+            payMode: {
+              labels: {},
+              filter: { exclude: [] },
+              order: ['CC', 'DC', 'NB', 'UPI', 'PPBL', 'PPI', 'BALANCE'],
+            },
             website: 'WEBSTAGING',
             flow: 'DEFAULT',
-            merchant: {
-              mid: PAYTM_MID,
-              redirect: false, // Handle success/failure in callback functions
-            },
+            merchant: { mid: PAYTM_MID, redirect: false },
             handler: {
               transactionStatus: (paymentStatus) => {
                 console.log('Paytm Transaction Status:', paymentStatus);
@@ -99,7 +117,7 @@ export default function Checkout() {
                   reject(new Error('Payment failed'));
                 }
               },
-              notifyMerchant: (eventName, data) => {
+              notifyMerchant: (eventName) => {
                 if (eventName === 'SESSION_EXPIRED') {
                   toast.error('Payment session expired. Please try again.');
                   reject(new Error('Session expired'));
@@ -108,14 +126,13 @@ export default function Checkout() {
             },
           };
 
-          window.Paytm.CheckoutJS.onLoad(() => {
-            window.Paytm.CheckoutJS.init(config)
-              .then(() => window.Paytm.CheckoutJS.invoke())
-              .catch((err) => {
-                console.error('Paytm CheckoutJS init error:', err);
-                reject(new Error('Payment gateway initialization failed'));
-              });
-          });
+          // Directly call init — do not rely on onLoad (unreliable on Paytm Blink SDK)
+          window.Paytm.CheckoutJS.init(config)
+            .then(() => window.Paytm.CheckoutJS.invoke())
+            .catch((err) => {
+              console.error('Paytm CheckoutJS init error:', err);
+              reject(new Error(`Paytm gateway error: ${err?.message || err}`));
+            });
         });
       }
     } catch (err) {
