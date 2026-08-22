@@ -41,14 +41,36 @@ export default function Cart() {
               const cur = item.selectedCurrency || 'INR';
               const priceKey = `price_${cur.toLowerCase()}`;
               const price = item[priceKey] || item.price_inr || 0;
-              const img = item.product_images?.[0]?.enhanced_url || item.product_images?.[0]?.raw_url;
+              const img = item.image ||
+                item.image_url ||
+                item.imageUrl ||
+                item.enhanced_url ||
+                item.raw_url ||
+                item.product_images?.[0]?.enhanced_url ||
+                item.product_images?.[0]?.raw_url ||
+                (typeof item.product_images?.[0] === 'string' ? item.product_images[0] : null);
 
               return (
                 <div key={item.id} className="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex gap-5 items-start hover:border-action-cyan transition-colors">
-                  <div className="w-24 h-24 rounded-lg overflow-hidden bg-surface-container flex-shrink-0">
-                    {img ? <img src={img} alt={item.title} className="w-full h-full object-cover" /> : (
-                      <div className="w-full h-full flex items-center justify-center"><span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '32px' }}>image</span></div>
+                  <div className="w-24 h-24 rounded-lg overflow-hidden bg-surface-container flex-shrink-0 relative">
+                    {img && (
+                      <img
+                        src={img}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          const fallback = e.target.nextElementSibling;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
+                      />
                     )}
+                    <div
+                      className="w-full h-full flex items-center justify-center bg-paytm-cyan/10"
+                      style={{ display: img ? 'none' : 'flex' }}
+                    >
+                      <span className="material-symbols-outlined text-action-cyan" style={{ fontSize: '36px' }}>palette</span>
+                    </div>
                   </div>
                   <div className="flex-1 min-w-0">
                     {item.craft_type && <p className="text-action-cyan uppercase tracking-wider mb-1" style={{ fontFamily: 'Inter', fontSize: '11px', fontWeight: '600' }}>{item.craft_type}</p>}

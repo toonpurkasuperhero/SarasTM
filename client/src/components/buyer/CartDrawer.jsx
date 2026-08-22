@@ -43,29 +43,53 @@ export default function CartDrawer({ open, onClose }) {
               <p className="text-sm text-gray-400 mt-1">Discover beautiful Indian crafts</p>
             </div>
           )}
-          {items.map((item) => (
-            <div key={item.id} className="flex gap-3 bg-paytm-bg rounded-xl p-3">
-              <img
-                src={item.product_images?.[0]?.enhanced_url || item.product_images?.[0]?.raw_url}
-                alt={item.title}
-                className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
-              />
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-paytm-navy text-sm line-clamp-2">{item.title}</p>
-                <p className="text-paytm-cyan font-bold mt-1">
-                  {symbols[currency]}{Number(getPrice(item) || 0).toLocaleString()} {currency}
-                </p>
+          {items.map((item) => {
+            const itemImg = item.image ||
+              item.image_url ||
+              item.imageUrl ||
+              item.enhanced_url ||
+              item.raw_url ||
+              item.product_images?.[0]?.enhanced_url ||
+              item.product_images?.[0]?.raw_url ||
+              (typeof item.product_images?.[0] === 'string' ? item.product_images[0] : null);
+
+            return (
+              <div key={item.id} className="flex gap-3 bg-paytm-bg rounded-xl p-3">
+                {itemImg && (
+                  <img
+                    src={itemImg}
+                    alt={item.title}
+                    className="w-16 h-16 object-cover rounded-lg flex-shrink-0 bg-gray-100"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      const fallback = e.target.nextElementSibling;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
+                )}
+                <div
+                  className="w-16 h-16 rounded-lg bg-paytm-cyan/10 text-paytm-navy items-center justify-center font-bold text-xl flex-shrink-0"
+                  style={{ display: itemImg ? 'none' : 'flex' }}
+                >
+                  🎨
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-paytm-navy text-sm line-clamp-2">{item.title}</p>
+                  <p className="text-paytm-cyan font-bold mt-1">
+                    {symbols[currency]}{Number(getPrice(item) || 0).toLocaleString()} {currency}
+                  </p>
+                </div>
+                <button
+                  onClick={() => removeItem(item.id)}
+                  className="p-1 text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-              <button
-                onClick={() => removeItem(item.id)}
-                className="p-1 text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {items.length > 0 && (

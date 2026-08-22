@@ -205,14 +205,40 @@ export default function Checkout() {
         {items.map((item) => {
           const priceInr = getItemPriceINR(item);
           const priceConverted = convertPrice(priceInr);
+          const itemImg = item.image ||
+            item.image_url ||
+            item.imageUrl ||
+            item.enhanced_url ||
+            item.raw_url ||
+            item.product_images?.[0]?.enhanced_url ||
+            item.product_images?.[0]?.raw_url ||
+            (typeof item.product_images?.[0] === 'string' ? item.product_images[0] : null);
+
           return (
             <div key={item.id} className="flex items-center gap-3 py-3 border-b border-gray-100 last:border-0">
-              <img src={item.product_images?.[0]?.enhanced_url || item.product_images?.[0]?.raw_url} alt={item.title} className="w-14 h-14 object-cover rounded-lg" />
-              <div className="flex-1">
-                <p className="font-medium text-paytm-navy text-sm">{item.title}</p>
+              {itemImg && (
+                <img
+                  src={itemImg}
+                  alt={item.title}
+                  className="w-14 h-14 object-cover rounded-lg bg-gray-100 flex-shrink-0"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    const fallback = e.target.nextElementSibling;
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
+                />
+              )}
+              <div
+                className="w-14 h-14 rounded-lg bg-paytm-cyan/10 text-paytm-navy items-center justify-center font-bold text-xl flex-shrink-0"
+                style={{ display: itemImg ? 'none' : 'flex' }}
+              >
+                🎨
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-paytm-navy text-sm truncate">{item.title}</p>
                 <p className="text-xs text-gray-400">{item.craft_type}</p>
               </div>
-              <div className="text-right">
+              <div className="text-right flex-shrink-0">
                 <p className="font-bold text-paytm-navy">{sym}{priceConverted.toLocaleString()}</p>
                 {selectedCurrency !== 'INR' && <p className="text-xs text-gray-400">₹{priceInr.toLocaleString()} INR</p>}
               </div>
