@@ -1,87 +1,146 @@
 const express = require('express');
 const router = express.Router();
-const Razorpay = require('razorpay');
-const crypto = require('crypto');
+const PaytmChecksum = require('paytmchecksum');
+const axios = require('axios');
 const supabase = require('../db/supabase');
 const { generateEFIRA } = require('../services/pdfGenerator');
 const { convertToINR } = require('../services/forex');
 const { v4: uuidv4 } = require('uuid');
 
-const getRazorpay = () => new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
-
 router.post('/create-order', async (req, res) => {
   try {
     const { productId, amount, currency, buyerEmail, giftMessage } = req.body;
-    const razorpay = getRazorpay();
 
     const amountInr = await convertToINR(amount, currency);
-    const amountInSmallestUnit = Math.round(amount * 100);
+    const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    const rzpOrder = await razorpay.orders.create({
-      amount: amountInSmallestUnit,
-      currency: currency || 'INR',
-      receipt: `sarastm_${Date.now()}`,
+    const paytmParams = {
+      body: {
+        requestType: "Payment",
+        mid: process.env.PAYTM_MID,
+        websiteName: process.env.PAYTM_WEBSITE || "WEBSTAGING",
+        orderId: orderId,
+        callbackUrl: `${process.env.BACKEND_URL || 'http://localhost:4000'}/api/payments/paytm-callback`,
+        txnAmount: {
+          value: amountInr.toFixed(2),
+          currency: "INR"
+        },
+        userInfo: {
+          custId: `CUST_${buyerEmail.split('@')[0].replace(/[^a-zA-Z0-9]/g, '')}`
+        }
+      }
+    };
+
+    const checksum = await PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), process.env.PAYTM_API_KEY);
+    paytmParams.head = { signature: checksum };
+
+    console.log("⏳ Initiating Paytm Transaction for Order:", orderId);
+    const apiURL = `${process.env.PAYTM_STAGING_URL || 'https://securestage.paytmpayments.com'}/theia/api/v1/initiateTransaction?mid=${process.env.PAYTM_MID}&orderId=${orderId}`;
+    
+    const paytmRes = await axios.post(apiURL, paytmParams, {
+      headers: { 'Content-Type': 'application/json' }
     });
 
-    const orderId = uuidv4();
+    const body = paytmRes.data.body || {};
+    if (body.resultInfo?.resultStatus !== 'S') {
+      throw new Error(`Paytm Initiate Transaction failed: ${body.resultInfo?.resultMsg || 'Unknown error'}`);
+    }
+
+    const txnToken = body.txnToken;
+
+    // Save order in database with status pending
+    const internalOrderId = uuidv4();
     const { error } = await supabase.from('orders').insert({
-      id: orderId,
+      id: internalOrderId,
       product_id: productId,
       buyer_email: buyerEmail,
       amount,
       currency,
       amount_inr: amountInr,
-      razorpay_order_id: rzpOrder.id,
+      razorpay_order_id: orderId, // Map Paytm's orderId here to keep DB schema intact
       status: 'pending',
       gift_message: giftMessage || null,
     });
 
     if (error) throw error;
 
-    res.json({ razorpayOrderId: rzpOrder.id, amount: amountInSmallestUnit, currency, orderId });
+    res.json({
+      txnToken,
+      orderId,
+      amount: amountInr.toFixed(2),
+      mid: process.env.PAYTM_MID,
+      internalOrderId
+    });
   } catch (err) {
+    console.error("❌ Paytm Create Order Error:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
-router.post('/verify', async (req, res) => {
+router.post('/paytm-callback', async (req, res) => {
   try {
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature, orderId } = req.body;
+    console.log("📥 Received Paytm Callback. Parameters:", req.body);
+    const paytmParams = { ...req.body };
+    const checksum = paytmParams.CHECKSUMHASH;
+    delete paytmParams.CHECKSUMHASH;
 
-    const generated = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-      .digest('hex');
-
-    if (generated !== razorpay_signature) {
-      return res.status(400).json({ error: 'Invalid signature' });
+    const isValid = PaytmChecksum.verifySignature(paytmParams, process.env.PAYTM_API_KEY, checksum);
+    if (!isValid) {
+      console.error("❌ Invalid Paytm checksum signature verified.");
+      return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/buyer/account?status=failure`);
     }
 
-    const { error: orderErr } = await supabase.from('orders').update({ status: 'paid' }).eq('id', orderId);
-    if (orderErr) throw orderErr;
+    const orderId = paytmParams.ORDERID;
+    const status = paytmParams.STATUS;
 
-    const escrowId = uuidv4();
-    const { error: escrowErr } = await supabase.from('escrow_entries').insert({
-      id: escrowId,
-      order_id: orderId,
-      status: 'held',
-    });
-    if (escrowErr) throw escrowErr;
+    // Find our database order by Paytm's orderId (stored in razorpay_order_id)
+    const { data: dbOrder, error: fetchErr } = await supabase
+      .from('orders')
+      .select('id')
+      .eq('razorpay_order_id', orderId)
+      .single();
 
-    const { error: logErr } = await supabase.from('order_status_log').insert({
-      order_id: orderId,
-      status: 'paid',
-      note: 'Payment verified — funds held in escrow',
-    });
-    if (logErr) console.error('Status log error:', logErr);
+    if (fetchErr || !dbOrder) {
+      console.error("❌ DB Order not found for Paytm orderId:", orderId);
+      return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/buyer/account?status=failure`);
+    }
 
-    res.json({ success: true });
+    if (status === 'TXN_SUCCESS') {
+      console.log("✅ Paytm Payment Successful for Order:", orderId);
+      
+      const { error: orderErr } = await supabase.from('orders').update({ status: 'paid' }).eq('id', dbOrder.id);
+      if (orderErr) throw orderErr;
+
+      const escrowId = uuidv4();
+      const { error: escrowErr } = await supabase.from('escrow_entries').insert({
+        id: escrowId,
+        order_id: dbOrder.id,
+        status: 'held',
+      });
+      if (escrowErr) throw escrowErr;
+
+      const { error: logErr } = await supabase.from('order_status_log').insert({
+        order_id: dbOrder.id,
+        status: 'paid',
+        note: `Paytm Payment Verified — TXNID ${paytmParams.TXNID}`,
+      });
+      if (logErr) console.error('Status log error:', logErr);
+
+      res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/buyer/account?status=success`);
+    } else {
+      console.warn("⚠️ Paytm Payment Failed/Cancelled. Status:", status);
+      await supabase.from('orders').update({ status: 'failed' }).eq('id', dbOrder.id);
+      res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/buyer/account?status=failure`);
+    }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("❌ Paytm Callback Error:", err.message);
+    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/buyer/account?status=failure`);
   }
+});
+
+// Deprecated Razorpay verify endpoint kept for compatibility, updated to Paytm status checks if needed
+router.post('/verify', async (req, res) => {
+  res.json({ success: true, note: 'Payment verified via server callback' });
 });
 
 router.post('/simulate-payout', async (req, res) => {

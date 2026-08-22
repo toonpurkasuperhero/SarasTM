@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useCartStore from '../../store/cartStore';
 import useAuthStore from '../../store/authStore';
 import Button from '../../components/ui/Button';
 import { paymentsAPI } from '../../lib/api';
 import toast from 'react-hot-toast';
+
+const PAYTM_MID = import.meta.env.VITE_PAYTM_MID || 'htVxwo06435735153732';
+const PAYTM_STAGING_URL = import.meta.env.VITE_PAYTM_STAGING_URL || 'https://securestage.paytmpayments.com';
 
 export default function Checkout() {
   const { items, currency, getTotal, clearCart } = useCartStore();
@@ -23,23 +26,37 @@ export default function Checkout() {
     return item.price_gbp;
   };
 
-  const loadRazorpay = () =>
+  const loadPaytmScript = () =>
     new Promise((resolve) => {
-      if (window.Razorpay) { resolve(true); return; }
+      if (window.Paytm?.CheckoutJS) { resolve(true); return; }
+      const existing = document.getElementById('paytm-checkout-js');
+      if (existing) { existing.remove(); }
+
       const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
+      script.id = 'paytm-checkout-js';
+      script.type = 'application/javascript';
+      script.src = `${PAYTM_STAGING_URL}/merchantpgpui/checkoutjs/merchants/${PAYTM_MID}.js`;
+      script.crossOrigin = 'anonymous';
+      script.onload = () => {
+        if (window.Paytm?.CheckoutJS) resolve(true);
+        else resolve(false);
+      };
       script.onerror = () => resolve(false);
-      document.body.appendChild(script);
+      document.head.appendChild(script);
     });
 
   const handleCheckout = async () => {
     if (!buyerEmail) { toast.error('Please enter your email'); return; }
     setLoading(true);
-    try {
-      const loaded = await loadRazorpay();
-      if (!loaded) { toast.error('Payment gateway failed to load'); return; }
 
+    try {
+      const loaded = await loadPaytmScript();
+      if (!loaded) {
+        toast.error('Paytm payment gateway failed to load. Please try again.');
+        return;
+      }
+
+      // Process each cart item
       for (const item of items) {
         const res = await paymentsAPI.createOrder({
           productId: item.id,
@@ -49,44 +66,61 @@ export default function Checkout() {
           giftMessage,
         });
 
-        const { razorpayOrderId, amount: orderAmount, currency: orderCurrency, orderId } = res.data;
+        const { txnToken, orderId, amount } = res.data;
 
         await new Promise((resolve, reject) => {
-          const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-            amount: orderAmount,
-            currency: orderCurrency,
-            name: 'SarasTM',
-            description: item.title,
-            order_id: razorpayOrderId,
-            theme: { color: '#00BAF2' },
-            prefill: { email: buyerEmail },
-            handler: async (response) => {
-              try {
-                await paymentsAPI.verify({
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_signature: response.razorpay_signature,
-                  orderId,
-                });
-                resolve();
-              } catch {
-                reject(new Error('Payment verification failed'));
-              }
+          const config = {
+            root: '',
+            style: { bodyBackgroundColor: '#fafafb', bodyColor: '', themeBackgroundColor: '#00BAF2', themeColor: '#ffffff', headerBackgroundColor: '#1a2e44', headerColor: '#ffffff', errorColor: '', successColor: '' },
+            data: {
+              orderId,
+              token: txnToken,
+              tokenType: 'TXN_TOKEN',
+              amount,
             },
-            modal: { ondismiss: () => reject(new Error('Payment cancelled')) },
+            payMode: { labels: {}, filter: { exclude: [] }, order: ['CC', 'DC', 'NB', 'UPI', 'PPBL', 'PPI', 'BALANCE'] },
+            website: 'WEBSTAGING',
+            flow: 'DEFAULT',
+            merchant: {
+              mid: PAYTM_MID,
+              redirect: false, // Handle success/failure in callback functions
+            },
+            handler: {
+              transactionStatus: (paymentStatus) => {
+                console.log('Paytm Transaction Status:', paymentStatus);
+                window.Paytm.CheckoutJS.close();
+                if (paymentStatus.STATUS === 'TXN_SUCCESS') {
+                  clearCart();
+                  toast.success('Payment successful! Your order has been placed.');
+                  navigate('/buyer/account?status=success');
+                  resolve();
+                } else {
+                  toast.error(`Payment failed: ${paymentStatus.RESPMSG || 'Transaction declined'}`);
+                  reject(new Error('Payment failed'));
+                }
+              },
+              notifyMerchant: (eventName, data) => {
+                if (eventName === 'SESSION_EXPIRED') {
+                  toast.error('Payment session expired. Please try again.');
+                  reject(new Error('Session expired'));
+                }
+              },
+            },
           };
-          const rzp = new window.Razorpay(options);
-          rzp.open();
+
+          window.Paytm.CheckoutJS.onLoad(() => {
+            window.Paytm.CheckoutJS.init(config)
+              .then(() => window.Paytm.CheckoutJS.invoke())
+              .catch((err) => {
+                console.error('Paytm CheckoutJS init error:', err);
+                reject(new Error('Payment gateway initialization failed'));
+              });
+          });
         });
       }
-
-      clearCart();
-      toast.success('Order placed successfully!');
-      navigate('/account');
     } catch (err) {
       if (err.message !== 'Payment cancelled') {
-        toast.error(err.message || 'Checkout failed');
+        toast.error(err.message || 'Checkout failed. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -102,9 +136,9 @@ export default function Checkout() {
     <div className="page-container py-8 max-w-2xl mx-auto space-y-6">
       <h1 className="section-title">Checkout</h1>
 
-      <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center gap-2">
-        <span className="text-amber-500 font-bold">🧪</span>
-        <p className="text-sm font-semibold text-amber-700">TEST MODE — No real money moves. Use test card: 4111 1111 1111 1111</p>
+      <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 flex items-center gap-3">
+        <img src="https://cdn.razorpay.com/static/assets/logo/paytm.svg" alt="Paytm" className="h-6 object-contain" onError={(e) => { e.target.style.display='none'; }} />
+        <p className="text-sm font-semibold text-blue-700">Paytm Staging — Secure payment powered by Paytm Gateway</p>
       </div>
 
       <div className="card space-y-4">
@@ -171,7 +205,7 @@ export default function Checkout() {
       </div>
 
       <Button onClick={handleCheckout} disabled={loading} size="lg" className="w-full">
-        {loading ? 'Processing...' : `Pay ${symbols[currency]}${Number(getTotal()).toLocaleString()} ${currency}`}
+        {loading ? 'Opening Paytm...' : `Pay ${symbols[currency]}${Number(getTotal()).toLocaleString()} ${currency} via Paytm`}
       </Button>
     </div>
   );
