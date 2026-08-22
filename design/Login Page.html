@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SarasTM - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#2d3133",
+                    "tertiary": "#3e0002",
+                    "on-primary-fixed": "#001849",
+                    "action-cyan": "#00BAF2",
+                    "surface-bright": "#f7f9fc",
+                    "surface": "#f7f9fc",
+                    "on-background": "#191c1e",
+                    "deep-ink": "#000000",
+                    "surface-gray": "#F4F4F4",
+                    "surface-tint": "#3f5ba3",
+                    "surface-container": "#eceef1",
+                    "outline-variant": "#c4c6d2",
+                    "trust-blue": "#002970",
+                    "secondary": "#006686",
+                    "surface-container-highest": "#e0e3e6",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#d8dadd",
+                    "on-primary-fixed-variant": "#25438a",
+                    "tertiary-container": "#650006",
+                    "on-tertiary-fixed-variant": "#93000d",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#747682",
+                    "on-surface": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#410002",
+                    "primary": "#001645",
+                    "on-primary-container": "#7893df",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#444651",
+                    "primary-fixed-dim": "#b3c5ff",
+                    "heritage-red": "#E31E24",
+                    "on-tertiary-container": "#ff6157",
+                    "on-secondary-fixed-variant": "#004d66",
+                    "secondary-fixed": "#c0e8ff",
+                    "surface-variant": "#e0e3e6",
+                    "background": "#f7f9fc",
+                    "surface-container-high": "#e6e8eb",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#dae1ff",
+                    "on-secondary-container": "#004f69",
+                    "error": "#ba1a1a",
+                    "inverse-primary": "#b3c5ff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#71d2ff",
+                    "surface-container-low": "#f2f4f7",
+                    "secondary-container": "#2bc6ff",
+                    "inverse-on-surface": "#eff1f4",
+                    "on-primary": "#ffffff",
+                    "primary-container": "#002970",
+                    "tertiary-fixed-dim": "#ffb4ab",
+                    "tertiary-fixed": "#ffdad6",
+                    "on-secondary-fixed": "#001e2b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "unit": "8px",
+                    "margin-desktop": "64px"
+            },
+            "fontFamily": {
+                    "title-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "display-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Hanken Grotesk"
+                    ]
+            },
+            "fontSize": {
+                    "title-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<style>
+        /* Subtle background pattern for Artisan side */
+        .pattern-bg {
+            background-color: #f7f9fc;
+            background-image: radial-gradient(circle at 100% 150%, #f7f9fc 24%, white 24%, white 28%, #f7f9fc 28%, #f7f9fc 36%, white 36%, white 40%, transparent 40%, transparent),
+            radial-gradient(circle at 0    150%, #f7f9fc 24%, white 24%, white 28%, #f7f9fc 28%, #f7f9fc 36%, white 36%, white 40%, transparent 40%, transparent),
+            radial-gradient(circle at 50%  100%, white 10%, #f7f9fc 10%, #f7f9fc 23%, white 23%, white 30%, #f7f9fc 30%, #f7f9fc 43%, white 43%, white 50%, #f7f9fc 50%, #f7f9fc 63%, white 63%, white 71%, transparent 71%, transparent),
+            radial-gradient(circle at 100% 50%, white 5%, #f7f9fc 5%, #f7f9fc 15%, white 15%, white 20%, #f7f9fc 20%, #f7f9fc 29%, white 29%, white 34%, #f7f9fc 34%, #f7f9fc 44%, white 44%, white 49%, transparent 49%, transparent),
+            radial-gradient(circle at 0    50%, white 5%, #f7f9fc 5%, #f7f9fc 15%, white 15%, white 20%, #f7f9fc 20%, #f7f9fc 29%, white 29%, white 34%, #f7f9fc 34%, #f7f9fc 44%, white 44%, white 49%, transparent 49%, transparent);
+            background-size: 100px 50px;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface h-screen w-full flex items-center justify-center overflow-hidden m-0 p-0 selection:bg-action-cyan selection:text-white">
+<main class="flex flex-col md:flex-row w-full h-full max-w-screen-3xl mx-auto bg-surface-container-lowest relative shadow-2xl">
+<!-- Artisan Entrance (Left) -->
+<section class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 relative z-10 border-b md:border-b-0 md:border-r border-outline-variant bg-surface-container-lowest overflow-y-auto">
+<!-- Decorative Background Pattern -->
+<div class="absolute inset-0 pattern-bg pointer-events-none mix-blend-multiply"></div>
+<!-- Floating Top Gradient -->
+<div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-primary-fixed/20 to-transparent pointer-events-none"></div>
+<div class="relative z-20 flex flex-col h-full py-12 md:py-24">
+<!-- Branding -->
+<div class="mb-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[32px] text-trust-blue" style="font-variation-settings: 'FILL' 1;">eco</span>
+<h1 class="font-headline-lg text-headline-lg text-trust-blue m-0">SarasTM</h1>
+</div>
+<p class="font-label-sm text-label-sm text-heritage-red uppercase tracking-widest mt-2 ml-1">Artisan Entrance</p>
+</div>
+<div class="max-w-md w-full mx-auto md:mx-0 mt-12 md:mt-0">
+<h2 class="font-display-lg text-display-lg text-on-background mb-4">Welcome back, Creator.</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-10">Access your digital storefront, manage your craft catalog, and connect with global buyers seamlessly.</p>
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<!-- Phone Input -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Phone Number</label>
+<div class="flex shadow-sm rounded-md group relative bg-surface-lowest">
+<span class="inline-flex items-center px-4 border border-r-0 border-outline-variant bg-surface-container-lowest rounded-l-md font-body-md text-body-md text-on-surface-variant group-focus-within:border-trust-blue transition-colors z-10">+91</span>
+<input class="flex-1 block w-full rounded-none rounded-r-md border border-outline-variant bg-transparent font-body-md text-body-md text-on-surface focus:border-trust-blue focus:ring-1 focus:ring-trust-blue transition-colors px-4 py-3 z-10 relative" placeholder="Enter your 10-digit number" type="tel"/>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-trust-blue text-on-primary font-title-md text-title-md py-3.5 px-4 rounded-lg hover:bg-primary transition-all duration-300 flex justify-center items-center gap-2 shadow-sm hover:shadow-md transform hover:-translate-y-0.5" type="submit">
+                            Send Secure OTP
+                            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<!-- Divider -->
+<div class="relative flex py-2 items-center">
+<div class="flex-grow border-t border-outline-variant"></div>
+<span class="flex-shrink-0 mx-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Or</span>
+<div class="flex-grow border-t border-outline-variant"></div>
+</div>
+<!-- Voice Login Alternative (Highlight Component) -->
+<div>
+<button class="w-full bg-surface-container-lowest border-2 border-action-cyan/30 text-secondary-container font-title-md text-title-md py-3.5 px-4 rounded-lg hover:bg-action-cyan/5 hover:border-action-cyan transition-all duration-300 flex justify-center items-center gap-3 group relative overflow-hidden" type="button">
+<div class="absolute inset-0 bg-action-cyan opacity-0 group-hover:opacity-5 transition-opacity"></div>
+<span class="material-symbols-outlined text-[28px] text-action-cyan group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">mic</span>
+<span class="text-on-surface">Login via Voice</span>
+</button>
+<p class="font-label-sm text-label-sm text-center text-on-surface-variant mt-3 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                                Speak your registered phone number in your language
+                            </p>
+</div>
+</form>
+</div>
+<div class="mt-auto pt-12 md:pt-0">
+<p class="font-label-sm text-label-sm text-on-surface-variant text-center md:text-left">Need help? <a class="text-trust-blue hover:underline" href="#">Contact Artisan Support</a></p>
+</div>
+</div>
+</section>
+<!-- Customer & Buyer Entrance (Right) -->
+<section class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 relative z-10 bg-surface-container-low overflow-y-auto border-l border-outline-variant/50 shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.1)]">
+<div class="relative z-20 flex flex-col h-full py-12 md:py-24">
+<div class="mb-auto text-right">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-2 hidden md:block">Customer &amp; Buyer Entrance</p>
+</div>
+<div class="max-w-md w-full mx-auto md:mx-0 lg:ml-auto mt-12 md:mt-0">
+<h2 class="font-display-lg text-display-lg text-on-background mb-4">Discover Heritage.</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-10">Sign in to explore verified, AI-curated authentic Indian craftsmanship from vetted artisans.</p>
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<!-- Email -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Corporate or Personal Email</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-[20px]">mail</span>
+</span>
+<input class="block w-full rounded-md border border-outline-variant bg-surface-lowest font-body-md text-body-md text-on-surface focus:border-trust-blue focus:ring-1 focus:ring-trust-blue pl-10 py-3 transition-colors" placeholder="name@company.com" type="email"/>
+</div>
+</div>
+<!-- Password -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="block font-label-sm text-label-sm text-on-surface">Password</label>
+<a class="font-label-sm text-label-sm text-action-cyan hover:underline hover:text-secondary-container transition-colors" href="#">Forgot Password?</a>
+</div>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-[20px]">lock</span>
+</span>
+<input class="block w-full rounded-md border border-outline-variant bg-surface-lowest font-body-md text-body-md text-on-surface focus:border-trust-blue focus:ring-1 focus:ring-trust-blue pl-10 py-3 transition-colors" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<!-- Action -->
+<button class="w-full bg-deep-ink text-on-primary font-title-md text-title-md py-3.5 px-4 rounded-lg hover:bg-inverse-surface transition-all duration-300 shadow-sm mt-2" type="submit">
+                            Sign In to Marketplace
+                        </button>
+<!-- Social Login -->
+<div class="relative flex py-4 items-center">
+<div class="flex-grow border-t border-outline-variant"></div>
+<span class="flex-shrink-0 mx-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Continue with</span>
+<div class="flex-grow border-t border-outline-variant"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="bg-surface-container-lowest border border-outline-variant py-3 rounded-lg flex justify-center items-center hover:bg-surface-container transition-colors shadow-sm gap-2 text-on-surface font-body-md text-body-md" type="button">
+<span class="material-symbols-outlined text-[20px]">language</span> Google
+                            </button>
+<button class="bg-surface-container-lowest border border-outline-variant py-3 rounded-lg flex justify-center items-center hover:bg-surface-container transition-colors shadow-sm gap-2 text-on-surface font-body-md text-body-md" type="button">
+<span class="material-symbols-outlined text-[20px] text-[#0077b5]" style="font-variation-settings: 'FILL' 1;">work</span> LinkedIn
+                            </button>
+</div>
+</form>
+</div>
+<div class="mt-auto pt-12 md:pt-0 text-center md:text-right">
+<p class="font-label-sm text-label-sm text-on-surface-variant">New to SarasTM? <a class="text-action-cyan hover:underline" href="#">Apply for Buyer Access</a></p>
+</div>
+</div>
+</section>
+</main>
+</body></html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Details - SarasTM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e0e3e6",
+                        "surface": "#f7f9fc",
+                        "deep-ink": "#000000",
+                        "primary": "#001645",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d8dadd",
+                        "outline-variant": "#c4c6d2",
+                        "on-secondary-container": "#004f69",
+                        "inverse-surface": "#2d3133",
+                        "surface-container-high": "#e6e8eb",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#3e0002",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "secondary": "#006686",
+                        "on-primary-fixed": "#001849",
+                        "tertiary-container": "#650006",
+                        "background": "#f7f9fc",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#93000d",
+                        "surface-gray": "#F4F4F4",
+                        "outline": "#747682",
+                        "surface-container": "#eceef1",
+                        "on-surface": "#191c1e",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#c0e8ff",
+                        "on-surface-variant": "#444651",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#002970",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e0e3e6",
+                        "surface-container-low": "#f2f4f7",
+                        "inverse-on-surface": "#eff1f4",
+                        "primary-fixed": "#dae1ff",
+                        "heritage-red": "#E31E24",
+                        "on-background": "#191c1e",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#004d66",
+                        "trust-blue": "#002970",
+                        "surface-tint": "#3f5ba3",
+                        "tertiary-fixed": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb4ab",
+                        "on-secondary-fixed": "#001e2b",
+                        "on-primary-container": "#7893df",
+                        "surface-bright": "#f7f9fc",
+                        "action-cyan": "#00BAF2",
+                        "on-primary-fixed-variant": "#25438a",
+                        "on-tertiary-fixed": "#410002",
+                        "secondary-fixed-dim": "#71d2ff",
+                        "on-tertiary-container": "#ff6157",
+                        "inverse-primary": "#b3c5ff",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#2bc6ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "64px",
+                        "unit": "8px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.surface');
+            color: theme('colors.on-surface');
+        }
+        .authenticity-watermark {
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 Q60 40 100 50 Q60 60 50 100 Q40 60 0 50 Q40 40 50 0 Z" fill="rgba(0,186,242,0.03)"/></svg>');
+            background-size: 50px 50px;
+        }
+        .glass-overlay {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 24px rgba(0, 41, 112, 0.04);
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen font-body-md text-body-md">
+<!-- TopNavBar -->
+<header class="bg-surface border-b border-outline-variant docked full-width top-0 sticky z-50">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto w-full">
+<div class="flex items-center gap-8">
+<a class="font-headline-lg text-headline-lg font-bold text-primary" href="#">SarasTM</a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-primary border-b-2 border-heritage-red pb-1 font-bold font-title-md text-title-md active" href="#">Marketplace</a>
+<a class="text-on-surface-variant hover:text-action-cyan transition-colors duration-200 font-title-md text-title-md" href="#">Artisans</a>
+<a class="text-on-surface-variant hover:text-action-cyan transition-colors duration-200 font-title-md text-title-md" href="#">Export Desk</a>
+<a class="text-on-surface-variant hover:text-action-cyan transition-colors duration-200 font-title-md text-title-md" href="#">Impact</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT focus:outline-none focus:border-action-cyan focus:ring-1 focus:ring-action-cyan text-body-md w-64 transition-all" placeholder="Search curated crafts..." type="text"/>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-action-cyan transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-action-cyan transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-action-cyan transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-24">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant mb-8 uppercase tracking-wider">
+<a class="hover:text-action-cyan transition-colors" href="#">Marketplace</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a class="hover:text-action-cyan transition-colors" href="#">Textiles</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary font-bold">Kanchipuram Silk Sari</span>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-24">
+<!-- Left Column: Imagery -->
+<div class="lg:col-span-7 flex flex-col gap-unit">
+<div class="relative w-full aspect-[4/5] bg-surface-container rounded-lg overflow-hidden border border-outline-variant group">
+<img alt="Product Image" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A highly detailed, exquisite close-up of a hand-woven Kanchipuram silk sari. The rich, deep indigo blue fabric features intricate, shimmering gold Zari borders with traditional temple motifs. The lighting is soft and directional, highlighting the luxurious texture and drape of the silk. The setting is minimal, allowing the craftsmanship to stand out against a clean, light-mode background, evoking a sense of high-end, premium quality and cultural heritage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkK5wMKRgxOLuSh5KRZpn1713_XOLl5bg_raaC9Pb2VdWLgcO4iAxJJmsZ8nAxaU3b8r3fxnplcofA6p7SdTl2dbwaNqYf6mkV9UBrXy9wkNuNsANrAL2uN429rTcxMMeTy3L3pHhlQTbljJxakgDhbDCVsFZwSgypZIMRJvVPI20jEjivWn_I9Zr7eBN6gpLkOhntSsZY2_7cHkM0WqVzj-Q4Gftz01LAaA691fuYEx4Bdo8iI8l6Gw"/>
+<div class="absolute top-4 left-4 bg-surface-container-lowest text-primary font-label-sm text-label-sm px-3 py-1 rounded-DEFAULT border border-outline-variant flex items-center gap-1 uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]">diamond</span>
+                        One-of-a-Kind
+                    </div>
+</div>
+<div class="grid grid-cols-4 gap-unit">
+<div class="aspect-square bg-surface-container rounded-lg overflow-hidden border-2 border-action-cyan cursor-pointer">
+<img alt="Thumbnail 1" class="w-full h-full object-cover" data-alt="A detailed flat lay shot of a folded Kanchipuram silk sari, showcasing the contrasting pallu (end piece) in vibrant magenta against the deep indigo body. The intricate gold Zari work is clearly visible, lit with soft, studio-quality light on a pristine white background. The image feels clean, modern, and highlights the authentic craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADpp6X5udeYodUBOCPxVIh1BGnXvMVlpCWOAfZFJ8XMgL3W_bO2W4yZnC2HRKM4L0m_ZyWRxWXvze_xFsznN2d1jPp-qGsmXlQK9uNwGGVpZbHy3nqEL8VdiA2-FYNlb2qkIiLuMwpUVu297Jz6xFTkcSZvYMcDsivAlla31N4rgkLQ_ZRXpevNjcZvnRmLC2iWhq6-1p5djZbQbhcH9HpnuipMB42XL1OsCBZ9-0_9b8nlkaxeSXDCQ"/>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg overflow-hidden border border-outline-variant cursor-pointer hover:border-action-cyan transition-colors">
+<img alt="Thumbnail 2" class="w-full h-full object-cover" data-alt="An extreme macro close-up of the Kanchipuram silk fabric, focusing on the individual threads of silk interwoven with metallic gold Zari. The shallow depth of field creates a beautiful bokeh effect in the background, emphasizing the precision of the hand-loomed textile. Soft, bright lighting reflects off the gold, creating a luxurious, premium aesthetic suitable for a high-tech artisan marketplace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnzyFZnbjcoP1nswUBmU61C39STbzuuTXZP-twq0Xwm1xmb9Vf21zGNgZqUx3cBaTNoBe7QQnyQmFNvuvW25Q1P93Af9mszGXqX1bbD9LRSYpx8C8ExGxEBnkjSfSJ9RS8yoaIzfXmMGx0lfzYTIwf5TbSAWcxWj5uy5sGzh5bPmT6GQURBVDF1B_WGSVKc2fsJJtE4fvhE_0pVZ9HExP8DgjdhqOUmO2PjIBf-0XnGKCK2SsmFmUtZw"/>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg overflow-hidden border border-outline-variant cursor-pointer hover:border-action-cyan transition-colors">
+<img alt="Thumbnail 3" class="w-full h-full object-cover" data-alt="A lifestyle shot of the Kanchipuram silk sari elegantly draped over a minimalist, modern wooden stand. The clean, white-space heavy setting emphasizes the vibrant colors and elegant fall of the fabric. Soft, natural light from a window illuminates the scene, blending traditional Indian textile art with a contemporary, high-end gallery presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCveh6HIfKjfuwC2XYaqulj_XJ3oD53azHG2b_mLmPLS_JTXm6MSMSm958GMxTDqjArM4xFuQciNUTEDkBRFoVi8xh2Y_CloXVdhwNJZOVvrDoLMfK0qjrWQnPF9Oy8h-g1fDUxMkez4e6FPXm_HeOTnx_09swPw20nYtGtNVYRwIeXRQOVxVDQx1EMwia_KNOpkx89bzjvr_vGaqj7pJJR3_UsZujXq1VXxUuJoWEtF8mwpcSSiL8kzg"/>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg overflow-hidden border border-outline-variant flex items-center justify-center cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-outline text-3xl">play_circle</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Details & Actions -->
+<div class="lg:col-span-5 flex flex-col pt-4 lg:pl-8">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-surface-gray text-deep-ink font-label-sm text-label-sm px-2 py-1 rounded-DEFAULT uppercase tracking-wider">Silk</span>
+<span class="bg-surface-gray text-deep-ink font-label-sm text-label-sm px-2 py-1 rounded-DEFAULT uppercase tracking-wider">Hand-Woven</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1 ml-auto">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                        Kanchipuram, TN
+                    </span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary mb-4">Midnight Indigo Zari Silk</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 leading-relaxed">
+                    A masterpiece of traditional Kanchipuram weaving, this one-of-a-kind sari features a deep indigo body offset by a vibrant magenta pallu, heavily interwoven with pure gold Zari thread in classic temple border motifs.
+                </p>
+<!-- Multi-Currency Price Widget -->
+<div class="glass-overlay rounded-lg p-6 mb-8 border border-outline-variant">
+<div class="flex justify-between items-end mb-2">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Global Price</span>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-headline-lg text-primary" id="main-price">$1,250.00</span>
+<span class="font-body-md text-body-md text-on-surface-variant">USD</span>
+</div>
+</div>
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-DEFAULT overflow-hidden">
+<select class="bg-transparent border-none text-body-md font-body-md py-1 pl-2 pr-8 focus:ring-0 cursor-pointer" id="currency-selector">
+<option selected="" value="USD">USD</option>
+<option value="EUR">EUR</option>
+<option value="GBP">GBP</option>
+<option value="INR">INR</option>
+</select>
+</div>
+</div>
+<div class="text-label-sm font-label-sm text-outline flex items-center gap-1">
+                        Base Price: ₹105,000 INR <span class="material-symbols-outlined text-[14px]" title="Converted at current market rates via Saras AI">info</span>
+</div>
+</div>
+<!-- Authenticity Passport -->
+<div class="bg-surface-container-lowest border border-heritage-red rounded-lg p-6 mb-8 relative overflow-hidden group">
+<div class="absolute inset-0 authenticity-watermark z-0 opacity-50"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-action-cyan">verified</span>
+                                Authenticity Passport
+                            </h3>
+<span class="bg-primary-container text-on-primary-container font-label-sm text-label-sm px-2 py-1 rounded-full flex items-center gap-1">
+                                Verified by Saras AI
+                            </span>
+</div>
+<div class="grid grid-cols-2 gap-4 text-sm">
+<div>
+<span class="text-on-surface-variant block font-label-sm uppercase tracking-wider mb-1">Origin Node</span>
+<span class="font-body-md font-semibold text-primary block truncate">Kanchipuram Weaver's Guild</span>
+</div>
+<div>
+<span class="text-on-surface-variant block font-label-sm uppercase tracking-wider mb-1">Material Assay</span>
+<span class="font-body-md font-semibold text-primary block truncate">100% Pure Mulberry Silk</span>
+</div>
+<div>
+<span class="text-on-surface-variant block font-label-sm uppercase tracking-wider mb-1">Creation Time</span>
+<span class="font-body-md font-semibold text-primary">145 Hours</span>
+</div>
+<div>
+<span class="text-on-surface-variant block font-label-sm uppercase tracking-wider mb-1">Digital Signature</span>
+<a class="font-body-md font-semibold text-action-cyan hover:underline flex items-center gap-1" href="#">
+                                    0x7a...4f9b
+                                    <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-4 mt-auto">
+<button class="w-full bg-trust-blue text-on-primary font-title-md text-title-md py-4 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-primary transition-colors shadow-sm">
+<span class="material-symbols-outlined">lock</span>
+                        Secure Escrow Payment
+                    </button>
+<button class="w-full bg-surface-container-lowest text-action-cyan border border-action-cyan font-title-md text-title-md py-4 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-action-cyan hover:bg-opacity-5 transition-colors">
+<span class="material-symbols-outlined">chat_bubble</span>
+                        Contact Artisan via Export Desk
+                    </button>
+</div>
+</div>
+</div>
+<!-- Artisan Story Section -->
+<section class="border-t border-outline-variant pt-24 mb-24">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+<div class="flex flex-col gap-6">
+<h2 class="font-headline-lg text-headline-lg text-primary">Meet the Master Weaver</h2>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-outline-variant">
+<img alt="Artisan Profile" class="w-full h-full object-cover" data-alt="A professional, well-lit portrait of a master weaver from Kanchipuram, India. An older artisan with a weathered, expressive face, wearing simple, traditional cotton clothing. He is situated in his clean, well-organized workshop with glimpses of wooden looms in the blurred background. The lighting is natural and bright, conveying a modern, high-end documentary style suitable for a premium artisan marketplace. The mood is respectful and highlights his expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa3NgQ36kTQQyl-hPz7CEEio3Wjzg-U0nLJd3NYGX54IVBGNPDDZLlzeEON9TLHyJ9xUZy6UmA-3E4mQMg3O_It7Ukn-Ur3TYHkFlcZyGgUjZjbsiCKzapdLBYVbW0-Kgu6dZ8FXIe-xvBsbmFU3S6fOIPr_rUkWCJh5aHI45cod2WkzDsrDrP5lCo9dNwtTTOG7q2qkz7NcC31ARh5DzC4IkC1le5esu8vBBAUV7APO7XpewV_YL03A"/>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary">Ramasamy V.</h3>
+<p class="font-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                Kanchipuram, Tamil Nadu
+                            </p>
+</div>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        With over 40 years of experience, Ramasamy is a 4th generation weaver specializing in traditional Korvai techniques. His work is characterized by immaculate precision and a deep understanding of natural dyes. Each piece he creates is a testament to the enduring legacy of Kanchipuram craftsmanship, preserved and presented to the world.
+                    </p>
+<a class="text-action-cyan font-title-md text-title-md flex items-center gap-1 hover:underline w-max" href="#">
+                        View Full Artisan Profile
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<div class="relative h-96 bg-surface-container rounded-xl overflow-hidden border border-outline-variant">
+<!-- Map/Location Visual placeholder -->
+<img alt="Location Map" class="w-full h-full object-cover opacity-80" data-alt="A highly stylized, minimalist map visualization of Tamil Nadu, India, pinpointing the location of Kanchipuram. The map uses a sleek, light-mode tech aesthetic with subtle topographic lines in light gray on a white background. A glowing action-cyan marker indicates Kanchipuram. The overall feel is modern, clean, and integrates smoothly into a high-tech UI design, emphasizing global connection." data-location="Kanchipuram, India" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFKw16YceXchaNr6IImi_xJPKtErQtm5VHJtw3g05DE-49z31l0Zuw_MGrcDJOxXWS4xS3OhO7NFYRmY4H6L1RWnEM1HmQh7o5iOoFGMX_Pm5G70D7E9pGiAh0KG5tK_5VsL3UbWaxV3woQmzrAGIgPlBDNxqxRidjWbGmKUVaTvr--C5rUZG8izM_6dovpydwdBiBaxXhBeW4u91F28Wd69BzfB1YP9ZTHcRooM7u3wlUFaxok6thaA"/>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary dark:bg-deep-ink w-full relative bottom-0">
+<div class="flex flex-col items-center justify-center py-12 px-margin-desktop gap-8 w-full max-w-container-max mx-auto">
+<h2 class="font-headline-lg text-headline-lg text-on-primary font-bold">SarasTM</h2>
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="font-label-sm text-label-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Cultural Heritage</a>
+<a class="font-label-sm text-label-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Export Compliance</a>
+<a class="font-label-sm text-label-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-surface-variant hover:text-on-primary transition-colors" href="#">Terms of Service</a>
+</nav>
+<p class="font-label-sm text-label-sm text-surface-variant opacity-70">
+                © 2024 Saras Trade Marketplace. Empowering Indian Craftsmanship through AI.
+            </p>
+</div>
+</footer>
+<script>
+        // Simple currency toggle interaction logic for demonstration
+        const currencySelector = document.getElementById('currency-selector');
+        const mainPrice = document.getElementById('main-price');
+        
+        const prices = {
+            'USD': '$1,250.00',
+            'EUR': '€1,160.00',
+            'GBP': '£990.00',
+            'INR': '₹105,000'
+        };
+
+        currencySelector.addEventListener('change', (e) => {
+            const currency = e.target.value;
+            mainPrice.textContent = prices[currency];
+            mainPrice.classList.add('opacity-50');
+            setTimeout(() => {
+                mainPrice.classList.remove('opacity-50');
+                mainPrice.classList.add('transition-opacity', 'duration-300');
+            }, 50);
+        });
+    </script>
+</body></html>

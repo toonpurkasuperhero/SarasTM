@@ -1,20 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const { transcribeAudio, translateToEnglish } = require('../services/bhashini');
+const sarvam = require('../services/sarvam');
 const { generateListing } = require('../services/gemini');
 const supabase = require('../db/supabase');
 const { v4: uuidv4 } = require('uuid');
+
+const SARVAM_ENABLED = sarvam.SARVAM_ENABLED;
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 } });
 
 router.post('/generate', upload.single('audio'), async (req, res) => {
   try {
-    const { language } = req.body;
-    const audioBuffer = req.file.buffer;
+    const { language, description, text } = req.body;
+    const inputText = description || text;
 
-    const nativeText = await transcribeAudio(audioBuffer, language || 'hi');
-    const englishText = language === 'en' ? nativeText : await translateToEnglish(nativeText, language || 'hi');
+    let englishText;
+    let nativeText;
+
+    if (!SARVAM_ENABLED || inputText) {
+      nativeText = inputText || 'एक सुंदर हस्तनिर्मित कलाकृति';
+      englishText = language === 'en' ? nativeText : await sarvam.translateToEnglish(nativeText, language || 'hi');
+    } else if (req.file) {
+      const audioBuffer = req.file.buffer;
+      nativeText = await sarvam.transcribeAudio(audioBuffer, language || 'hi');
+      englishText = language === 'en' ? nativeText : await sarvam.translateToEnglish(nativeText, language || 'hi');
+    } else {
+      throw new Error('No audio file or text description provided');
+    }
     const listing = await generateListing(englishText);
 
     const artisanId = req.user?.id;
@@ -34,6 +47,23 @@ router.post('/generate', upload.single('audio'), async (req, res) => {
       region_label: listing.region_label,
       status: 'draft',
     }).select().single();
+
+    if (error) throw error;
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/orders/received', async (req, res) => {
+  try {
+    const artisanId = req.user?.id || '34a1841b-9fd6-4409-96e3-fb61c5915071';
+    
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*, products!inner(*, product_images(*))')
+      .eq('products.artisan_id', artisanId)
+      .order('created_at', { ascending: false });
 
     if (error) throw error;
     res.json(data);

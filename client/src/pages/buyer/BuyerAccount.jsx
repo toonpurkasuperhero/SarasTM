@@ -1,168 +1,126 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import useAuthStore from '../../store/authStore';
-import { buyerAPI } from '../../lib/api';
-import Badge from '../../components/ui/Badge';
-import Button from '../../components/ui/Button';
-import Spinner from '../../components/ui/Spinner';
-import Modal from '../../components/ui/Modal';
-import toast from 'react-hot-toast';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+
+const STATUS_STEPS = ['pending', 'paid', 'shipped', 'delivered'];
+
+function StatusTimeline({ status }) {
+  const current = STATUS_STEPS.indexOf(status);
+  return (
+    <div className="flex items-center gap-0">
+      {STATUS_STEPS.map((s, i) => {
+        const done = i <= current;
+        const active = i === current;
+        return (
+          <div key={s} className="flex items-center flex-1">
+            <div className="flex flex-col items-center gap-1">
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center border-2 ${done ? 'bg-trust-blue border-trust-blue' : 'bg-surface-container border-outline-variant'}`}>
+                {done && <span className="material-symbols-outlined text-white" style={{ fontSize: '14px' }}>check</span>}
+                {active && <div className="w-2 h-2 rounded-full bg-trust-blue animate-pulse" />}
+              </div>
+              <span className={`capitalize text-center ${active ? 'text-primary font-bold' : done ? 'text-on-surface' : 'text-on-surface-variant'}`} style={{ fontFamily: 'Inter', fontSize: '11px', fontWeight: done ? '600' : '400' }}>{s}</span>
+            </div>
+            {i < STATUS_STEPS.length - 1 && <div className={`flex-1 h-0.5 ${i < current ? 'bg-trust-blue' : 'bg-outline-variant'}`} style={{ margin: '0 4px', marginBottom: '20px' }} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function BuyerAccount() {
-  const { user, signIn, signUp, signOut, signInWithGoogle, loading: authLoading } = useAuthStore();
   const [orders, setOrders] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
-  const [ordersLoading, setOrdersLoading] = useState(true);
-  const [authMode, setAuthMode] = useState('signin');
+  const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [authLoading2, setAuthLoading2] = useState(false);
+  const [searched, setSearched] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      Promise.all([buyerAPI.getMyOrders(), buyerAPI.getWishlist()])
-        .then(([ordersRes, wishlistRes]) => {
-          setOrders(ordersRes.data);
-          setWishlist(wishlistRes.data);
-        })
-        .catch(() => {})
-        .finally(() => setOrdersLoading(false));
-    }
-  }, [user]);
-
-  const handleAuth = async (e) => {
-    e.preventDefault();
-    setAuthLoading2(true);
+  const searchOrders = async () => {
+    if (!email.trim()) return;
+    setLoading(true);
     try {
-      if (authMode === 'signin') {
-        await signIn(email, password);
-        toast.success('Welcome back!');
-      } else {
-        await signUp(email, password, name);
-        toast.success('Account created! Check your email to verify.');
-      }
-    } catch (err) {
-      toast.error(err.message);
-    } finally {
-      setAuthLoading2(false);
-    }
+      const res = await axios.get(`${API}/api/buyer/orders?email=${encodeURIComponent(email)}`);
+      setOrders(res.data || []);
+    } catch { setOrders([]); }
+    finally { setLoading(false); setSearched(true); }
   };
-
-  const getStatusVariant = (status) => {
-    if (status === 'delivered') return 'green';
-    if (status === 'shipped') return 'cyan';
-    if (status === 'paid') return 'orange';
-    return 'navy';
-  };
-
-  if (authLoading) return <div className="flex justify-center py-24"><Spinner size="lg" /></div>;
-
-  if (!user) {
-    return (
-      <div className="page-container py-16 max-w-md mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="section-title">My Account</h1>
-          <p className="text-gray-500 mt-1">Sign in to view your orders and wishlist</p>
-        </div>
-        <div className="card space-y-4">
-          <div className="flex bg-paytm-bg rounded-xl p-1">
-            {['signin', 'signup'].map((mode) => (
-              <button
-                key={mode}
-                onClick={() => setAuthMode(mode)}
-                className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
-                  authMode === mode ? 'bg-white shadow text-paytm-navy' : 'text-gray-400'
-                }`}
-              >
-                {mode === 'signin' ? 'Sign In' : 'Create Account'}
-              </button>
-            ))}
-          </div>
-          <form onSubmit={handleAuth} className="space-y-3">
-            {authMode === 'signup' && (
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" className="input-field" />
-            )}
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="input-field" required />
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="input-field" required />
-            <Button type="submit" disabled={authLoading2} className="w-full">
-              {authLoading2 ? 'Please wait...' : authMode === 'signin' ? 'Sign In' : 'Create Account'}
-            </Button>
-          </form>
-          <div className="relative text-center">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-100" /></div>
-            <span className="relative bg-white px-3 text-xs text-gray-400">or</span>
-          </div>
-          <Button variant="secondary" className="w-full" onClick={signInWithGoogle}>
-            Sign in with Google
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="page-container py-8 space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="section-title">My Account</h1>
-          <p className="text-gray-500">{user.email}</p>
-        </div>
-        <Button variant="ghost" onClick={signOut}>Sign Out</Button>
-      </div>
+    <div className="min-h-screen bg-surface" style={{ padding: '40px 64px' }}>
+      <div className="max-w-container-max mx-auto">
+        <h1 className="font-hanken text-primary mb-3" style={{ fontSize: '48px', lineHeight: '56px', fontWeight: '700', letterSpacing: '-0.02em' }}>My Orders</h1>
+        <p className="text-on-surface-variant mb-10" style={{ fontFamily: 'Inter', fontSize: '18px' }}>Track your purchases and download invoices</p>
 
-      <div>
-        <h2 className="text-xl font-bold text-paytm-navy mb-4">My Orders</h2>
-        {ordersLoading ? (
-          <div className="flex justify-center py-8"><Spinner /></div>
+        {/* Email Search */}
+        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 mb-8 flex gap-4">
+          <div className="flex-1">
+            <label className="text-on-surface-variant uppercase tracking-wider mb-2 block" style={{ fontFamily: 'Inter', fontSize: '12px', fontWeight: '600' }}>Your Email Address</label>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && searchOrders()}
+              placeholder="Enter your email to find orders..."
+              className="w-full border border-outline-variant rounded-lg px-4 py-3 focus:outline-none focus:border-action-cyan transition-all bg-surface-container-lowest"
+              style={{ fontFamily: 'Inter', fontSize: '15px' }} />
+          </div>
+          <div className="flex items-end">
+            <button onClick={searchOrders} className="bg-trust-blue text-on-primary px-6 py-3 rounded-lg hover:bg-primary transition-colors font-hanken font-semibold" style={{ fontSize: '16px' }}>
+              Find Orders
+            </button>
+          </div>
+        </div>
+
+        {!searched ? (
+          <div className="text-center py-20">
+            <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '80px' }}>package_2</span>
+            <h3 className="font-hanken text-primary mt-4" style={{ fontSize: '24px', fontWeight: '600' }}>Enter your email to view orders</h3>
+          </div>
+        ) : loading ? (
+          <div className="flex flex-col gap-4">
+            {[1, 2].map(i => <div key={i} className="skeleton h-32 rounded-xl" />)}
+          </div>
         ) : orders.length === 0 ? (
-          <div className="card text-center py-10">
-            <p className="text-5xl mb-3">📦</p>
-            <p className="text-gray-400">No orders yet</p>
-            <Link to="/store" className="btn-primary inline-block mt-4">Start Shopping</Link>
+          <div className="text-center py-20">
+            <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '80px' }}>search_off</span>
+            <h3 className="font-hanken text-primary mt-4" style={{ fontSize: '24px', fontWeight: '600' }}>No orders found</h3>
+            <p className="text-on-surface-variant mt-2" style={{ fontFamily: 'Inter', fontSize: '16px' }}>Try a different email or browse the marketplace</p>
+            <Link to="/store" className="inline-block mt-6 bg-trust-blue text-on-primary px-6 py-3 rounded-lg hover:bg-primary transition-colors font-hanken font-semibold" style={{ fontSize: '16px', textDecoration: 'none' }}>
+              Browse Marketplace
+            </Link>
           </div>
         ) : (
-          <div className="space-y-4">
-            {orders.map((order) => (
-              <Link to={`/order/${order.id}`} key={order.id} className="card flex items-center gap-4 hover:shadow-card-hover transition-shadow cursor-pointer block">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-paytm-navy">{order.products?.title}</span>
-                    <Badge variant={getStatusVariant(order.status)}>{order.status}</Badge>
+          <div className="flex flex-col gap-5">
+            {orders.map((order) => {
+              const img = order.products?.product_images?.[0]?.enhanced_url || order.products?.product_images?.[0]?.raw_url;
+              return (
+                <div key={order.id} onClick={() => navigate(`/order/${order.id}`)}
+                  className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 hover:border-action-cyan transition-all cursor-pointer"
+                  style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div className="flex gap-5 items-start mb-5">
+                    <div className="w-20 h-20 rounded-lg overflow-hidden bg-surface-container flex-shrink-0">
+                      {img ? <img src={img} alt={order.products?.title} className="w-full h-full object-cover" /> : (
+                        <div className="w-full h-full flex items-center justify-center"><span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '28px' }}>image</span></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h3 className="font-hanken text-primary font-semibold truncate" style={{ fontSize: '18px' }}>{order.products?.title || 'Product'}</h3>
+                        <span className="font-hanken text-primary font-bold flex-shrink-0" style={{ fontSize: '20px' }}>
+                          {order.currency === 'INR' ? '₹' : order.currency === 'USD' ? '$' : order.currency === 'EUR' ? '€' : '£'}
+                          {Number(order.amount / 100).toLocaleString('en-IN')}
+                        </span>
+                      </div>
+                      <p className="text-on-surface-variant" style={{ fontFamily: 'Inter', fontSize: '13px' }}>
+                        Order #{order.id?.substring(0, 8)} · {new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-400 mt-0.5">
-                    {new Date(order.created_at).toLocaleDateString()} · ₹{order.amount_inr?.toLocaleString()}
-                  </p>
-                  {order.gift_message && (
-                    <p className="text-sm text-paytm-cyan mt-1 italic">💌 "{order.gift_message}"</p>
-                  )}
+                  <StatusTimeline status={order.status || 'pending'} />
                 </div>
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
-
-      {wishlist.length > 0 && (
-        <div>
-          <h2 className="text-xl font-bold text-paytm-navy mb-4">Wishlist ♡</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {wishlist.map((item) => (
-              <Link to={`/product/${item.product_id}`} key={item.id} className="card-hover text-center p-4">
-                <img
-                  src={item.products?.product_images?.[0]?.enhanced_url || 'https://source.unsplash.com/200x200/?craft'}
-                  alt={item.products?.title}
-                  className="w-full h-28 object-cover rounded-xl mb-2"
-                />
-                <p className="text-sm font-medium text-paytm-navy line-clamp-2">{item.products?.title}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

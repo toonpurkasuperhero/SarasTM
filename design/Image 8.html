@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Logistics &amp; Compliance Center - SarasTM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e0e3e6",
+                      "surface": "#f7f9fc",
+                      "deep-ink": "#000000",
+                      "primary": "#001645",
+                      "on-primary": "#ffffff",
+                      "surface-dim": "#d8dadd",
+                      "outline-variant": "#c4c6d2",
+                      "on-secondary-container": "#004f69",
+                      "inverse-surface": "#2d3133",
+                      "surface-container-high": "#e6e8eb",
+                      "on-error-container": "#93000a",
+                      "tertiary": "#3e0002",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "secondary": "#006686",
+                      "on-primary-fixed": "#001849",
+                      "tertiary-container": "#650006",
+                      "background": "#f7f9fc",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#93000d",
+                      "surface-gray": "#F4F4F4",
+                      "outline": "#747682",
+                      "surface-container": "#eceef1",
+                      "on-surface": "#191c1e",
+                      "on-error": "#ffffff",
+                      "secondary-fixed": "#c0e8ff",
+                      "on-surface-variant": "#444651",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#002970",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-variant": "#e0e3e6",
+                      "surface-container-low": "#f2f4f7",
+                      "inverse-on-surface": "#eff1f4",
+                      "primary-fixed": "#dae1ff",
+                      "heritage-red": "#E31E24",
+                      "on-background": "#191c1e",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#004d66",
+                      "trust-blue": "#002970",
+                      "surface-tint": "#3f5ba3",
+                      "tertiary-fixed": "#ffdad6",
+                      "tertiary-fixed-dim": "#ffb4ab",
+                      "on-secondary-fixed": "#001e2b",
+                      "on-primary-container": "#7893df",
+                      "surface-bright": "#f7f9fc",
+                      "action-cyan": "#00BAF2",
+                      "on-primary-fixed-variant": "#25438a",
+                      "on-tertiary-fixed": "#410002",
+                      "secondary-fixed-dim": "#71d2ff",
+                      "on-tertiary-container": "#ff6157",
+                      "inverse-primary": "#b3c5ff",
+                      "error-container": "#ffdad6",
+                      "secondary-container": "#2bc6ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "64px",
+                      "unit": "8px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col md:flex-row">
+<!-- Top Navigation (Desktop) -->
+<nav class="hidden md:flex bg-surface dark:bg-surface-dim font-title-md text-title-md docked full-width top-0 sticky z-50 border-b border-outline-variant dark:border-outline flat no shadows flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto w-full w-full absolute top-0 left-0 right-0 h-20">
+<div class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed">SarasTM</div>
+<div class="flex gap-8 items-center">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:text-action-cyan transition-colors duration-200" href="#">Marketplace</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:text-action-cyan transition-colors duration-200" href="#">Artisans</a>
+<a class="text-primary dark:text-primary-fixed border-b-2 border-heritage-red pb-1 font-bold opacity-80 scale-95 transition-all" href="#">Export Desk</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:text-action-cyan transition-colors duration-200" href="#">Impact</a>
+</div>
+<div class="flex gap-4 items-center">
+<button class="hover:text-action-cyan transition-colors duration-200"><span class="material-symbols-outlined">language</span></button>
+<button class="hover:text-action-cyan transition-colors duration-200"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:text-action-cyan transition-colors duration-200"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</nav>
+<!-- Side Navigation (Mobile Layout Base, Visible on Desktop as Portal Nav if needed, but per rules, choosing TopNav for desktop primary destination. Hiding SideNav on Desktop for this focused view, or treating as Portal. Will use SideNav as primary for Artisan Portal context, TopNav for global context. The prompt says "Logistics & Compliance Center". Let's show SideNav as it's a portal-like view.) -->
+<aside class="hidden md:flex bg-surface-container-low dark:bg-inverse-surface h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-inverse-surface border-r border-outline-variant flat no shadows flex flex-col h-full p-4 gap-2 z-40 mt-20 md:mt-0">
+<div class="mb-8 mt-4 px-4 hidden md:block">
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed mb-2">Artisan Portal</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Verified by Saras AI</div>
+</div>
+<button class="bg-trust-blue text-on-primary font-body-md py-2 px-4 rounded-lg mb-6 hover:bg-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span> New Listing
+        </button>
+<div class="flex-1 flex flex-col gap-2 font-body-md text-body-md">
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">mic_none</span> Voice Listing
+            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">shopping_bag</span> Orders
+            </a>
+<a class="flex items-center gap-3 p-3 bg-primary-container text-on-primary-container rounded-lg font-bold scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined">local_shipping</span> Logistics
+            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">payments</span> Payments
+            </a>
+</div>
+<div class="mt-auto flex flex-col gap-2 font-body-md text-body-md pt-4 border-t border-outline-variant">
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">help_outline</span> Support
+            </a>
+<a class="flex items-center gap-3 p-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop pt-24 md:pt-margin-desktop max-w-container-max mx-auto w-full">
+<header class="mb-12">
+<h1 class="font-display-lg text-display-lg text-primary mb-4">Logistics &amp; Compliance Center</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Monitor your international shipments, download AI-generated customs documentation, and track cross-border compliance in real-time.</p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Timeline Tracking (Spans 2 columns) -->
+<section class="md:col-span-2 bg-surface-container-lowest border border-surface-container-highest rounded-xl p-8 relative overflow-hidden">
+<!-- Decorative Watermark -->
+<div class="absolute inset-0 opacity-5 pointer-events-none" data-alt="Subtle, modern techno-heritage mandala pattern watermark on a pristine white background. High tech light mode." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAY9mgUglWZVzigeiUCOoXUzl8oubbMzIVZCZ0C_q3R180J6NqHsavl1_B0IAFU91nGlYVOZb3bu-swhSWLm8XD0wI3x2-7PSt4PE3idv1FGebbiV-xuX6zD2C5QJBSqVD82SaqEwein47YHHBGaDHsDNGox3XnqJNZLrRrHIz5MeMu4KExw70nuXg7g2_wUMXpzxKD9XFTH6DPgAUTdMHOtVTfP0gwwkj6swYsJqewlR3r9I373ybxRA'); background-size: cover; background-position: center;"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-center mb-8">
+<h2 class="font-headline-lg text-headline-lg text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-trust-blue">timeline</span> Shipment #ST-8992
+                        </h2>
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm">In Transit</span>
+</div>
+<!-- Visual Timeline -->
+<div class="relative mt-12 mb-8">
+<div class="absolute top-1/2 left-0 w-full h-1 bg-surface-container-highest -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-1/2 h-1 bg-trust-blue -translate-y-1/2 z-0 transition-all duration-1000"></div>
+<div class="flex justify-between relative z-10">
+<!-- Step 1 -->
+<div class="flex flex-col items-center gap-2 w-1/4">
+<div class="w-8 h-8 rounded-full bg-trust-blue text-on-primary flex items-center justify-center border-4 border-surface-container-lowest">
+<span class="material-symbols-outlined" style="font-size: 16px;">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-center text-primary">Artisan Pickup</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant opacity-70">Completed Oct 12</span>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center gap-2 w-1/4">
+<div class="w-8 h-8 rounded-full bg-trust-blue text-on-primary flex items-center justify-center border-4 border-surface-container-lowest">
+<span class="material-symbols-outlined" style="font-size: 16px;">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-center text-primary">Customs Clearance</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant opacity-70">Cleared Oct 14</span>
+</div>
+<!-- Step 3 (Active) -->
+<div class="flex flex-col items-center gap-2 w-1/4">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest border-4 border-trust-blue flex items-center justify-center shadow-[0_0_12px_rgba(0,41,112,0.2)]">
+<div class="w-2 h-2 rounded-full bg-trust-blue animate-pulse"></div>
+</div>
+<span class="font-label-sm text-label-sm text-center text-primary font-bold">International Transit</span>
+<span class="font-label-sm text-label-sm text-trust-blue">En Route to NY</span>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center gap-2 w-1/4">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border-4 border-surface-container-lowest flex items-center justify-center">
+</div>
+<span class="font-label-sm text-label-sm text-center text-on-surface-variant">Last Mile Delivery</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant opacity-50">Est. Oct 18</span>
+</div>
+</div>
+</div>
+<div class="mt-8 bg-surface-container p-4 rounded-lg flex items-center gap-4">
+<span class="material-symbols-outlined text-action-cyan">info</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Your shipment has left the origin port and is currently in international waters. ETA to destination port is 2 days.</p>
+</div>
+</div>
+</section>
+<!-- AI-Generated Documents (Spans 1 column) -->
+<section class="bg-surface-container-lowest border border-surface-container-highest rounded-xl p-8 flex flex-col">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-action-cyan" data-weight="fill">auto_awesome</span> AI Documents
+                </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-1">Drafts automatically generated based on your listing details and destination country regulations.</p>
+<div class="flex flex-col gap-3">
+<!-- Doc Item -->
+<div class="flex items-center justify-between p-3 border border-outline-variant rounded-lg hover:border-action-cyan transition-colors group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline group-hover:text-action-cyan">description</span>
+<div>
+<div class="font-title-md text-[16px] text-primary">Commercial Invoice</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">PDF • 120 KB</div>
+</div>
+</div>
+<button class="text-trust-blue hover:text-action-cyan p-2"><span class="material-symbols-outlined">download</span></button>
+</div>
+<!-- Doc Item -->
+<div class="flex items-center justify-between p-3 border border-outline-variant rounded-lg hover:border-action-cyan transition-colors group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline group-hover:text-action-cyan">inventory_2</span>
+<div>
+<div class="font-title-md text-[16px] text-primary">Export Declaration</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">PDF • 85 KB</div>
+</div>
+</div>
+<button class="text-trust-blue hover:text-action-cyan p-2"><span class="material-symbols-outlined">download</span></button>
+</div>
+<!-- Doc Item -->
+<div class="flex items-center justify-between p-3 border border-outline-variant rounded-lg hover:border-action-cyan transition-colors group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline group-hover:text-action-cyan">local_shipping</span>
+<div>
+<div class="font-title-md text-[16px] text-primary">Shipping Label</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">PNG • 45 KB</div>
+</div>
+</div>
+<button class="text-trust-blue hover:text-action-cyan p-2"><span class="material-symbols-outlined">download</span></button>
+</div>
+</div>
+<button class="w-full mt-6 border border-action-cyan text-primary bg-action-cyan/5 font-body-md py-2 rounded-lg hover:bg-action-cyan/10 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">refresh</span> Regenerate Docs
+                </button>
+</section>
+<!-- Live Tracking Map (Spans 3 columns below) -->
+<section class="md:col-span-3 h-96 bg-surface-container-lowest border border-surface-container-highest rounded-xl overflow-hidden relative">
+<!-- Map Background Placeholder -->
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A high-tech, minimalist world map visualization in light mode. Clean white and light gray tones with vibrant Action Cyan lines connecting global shipping routes. Dots indicate active logistics nodes. Professional, administrative style." data-location="Global" style="background-image: url('https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg')"></div>
+<!-- Glassmorphism Overlay Card -->
+<div class="absolute bottom-6 left-6 w-80 bg-surface/80 backdrop-blur-md border border-outline-variant rounded-xl p-6 shadow-[0_4px_24px_rgba(0,41,112,0.08)]">
+<h3 class="font-title-md text-title-md text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-action-cyan">satellite_alt</span> Live Status
+                    </h3>
+<div class="font-body-md text-body-md text-on-surface-variant mb-4">Partner: <span class="font-bold text-primary">FedEx CrossBorder</span></div>
+<div class="flex flex-col gap-2 border-t border-outline-variant pt-4">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Current Location</span>
+<span class="font-label-sm text-label-sm text-primary">Atlantic Ocean</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Speed</span>
+<span class="font-label-sm text-label-sm text-primary">24 knots</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer (Mobile Only Navigation) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-low border-t border-outline-variant flex justify-around p-4 z-50 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm text-[10px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="font-label-sm text-label-sm text-[10px]">Orders</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined bg-primary-container text-on-primary-container rounded-full p-1 mb-1">local_shipping</span>
+<span class="font-label-sm text-label-sm text-[10px] font-bold">Logistics</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm text-[10px]">Payments</span>
+</a>
+</nav>
+</body></html>

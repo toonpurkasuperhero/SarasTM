@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { findHSNCode } = require('../services/rag');
-const { generateExportDeclaration } = require('../services/pdfGenerator');
+const { generateExportDeclaration, generateCustomPDF } = require('../services/pdfGenerator');
 const supabase = require('../db/supabase');
 
 router.post('/hsn', async (req, res) => {
@@ -10,6 +10,23 @@ router.post('/hsn', async (req, res) => {
     if (!description) return res.status(400).json({ error: 'Description required' });
     const result = await findHSNCode(description);
     res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/generate-draft-pdf', async (req, res) => {
+  try {
+    const { docType, formData } = req.body;
+    if (!docType || !formData) {
+      return res.status(400).json({ error: 'docType and formData are required' });
+    }
+
+    const pdfBuffer = await generateCustomPDF(docType, formData);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${docType.replace(/\s+/g, '_')}_Draft.pdf"`);
+    res.send(pdfBuffer);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

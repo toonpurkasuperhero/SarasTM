@@ -27,33 +27,54 @@ router.post('/upload', upload.array('photos', 3), async (req, res) => {
   }
 });
 
-router.post('/enhance', async (req, res) => {
+router.post('/enhance', upload.array('images', 3), async (req, res) => {
   try {
-    const { productId, backdropName } = req.body;
+    const { productId, backdrop } = req.body;
+    const backdropName = backdrop || 'studio_white';
+    const results = [];
 
-    const { data: images, error: fetchErr } = await supabase
-      .from('product_images')
-      .select('*')
-      .eq('product_id', productId)
-      .order('created_at', { ascending: true });
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'No images uploaded' });
+    }
 
-    if (fetchErr) throw fetchErr;
-    if (!images?.length) return res.status(404).json({ error: 'No images found for product' });
+    const prodId = productId && productId !== 'undefined' ? productId : 'temp';
 
-    const firstImage = images[0];
-    const rawResponse = await fetch(firstImage.raw_url);
-    const rawBuffer = Buffer.from(await rawResponse.arrayBuffer());
+    for (const file of req.files) {
+      // 1. Upload raw photo
+      const rawUrl = await uploadRaw(file.buffer, prodId);
 
-    const enhancedUrl = await processAndUpload(rawBuffer, productId, backdropName || 'studio_white');
+      // 2. Enhance image
+      const enhancedUrl = await processAndUpload(file.buffer, prodId, backdropName);
 
-    const { error: updateErr } = await supabase
-      .from('product_images')
-      .update({ enhanced_url: enhancedUrl })
-      .eq('id', firstImage.id);
+      // 3. Save to database if productId is provided
+      if (prodId !== 'temp') {
+        const { data, error } = await supabase
+          .from('product_images')
+          .insert({
+            product_id: prodId,
+            raw_url: rawUrl,
+            enhanced_url: enhancedUrl
+          })
+          .select()
+          .single();
 
-    if (updateErr) throw updateErr;
-    res.json({ rawUrl: firstImage.raw_url, enhancedUrl });
+        if (error) throw error;
+
+        // Update the primary image cover of the product so it is live in the storefront
+        await supabase
+          .from('products')
+          .update({ image: enhancedUrl })
+          .eq('id', prodId);
+
+        results.push(data);
+      } else {
+        results.push({ raw_url: rawUrl, enhanced_url: enhancedUrl });
+      }
+    }
+
+    res.json(results);
   } catch (err) {
+    console.error('Enhancement error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });

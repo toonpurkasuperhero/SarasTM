@@ -46,9 +46,17 @@ export default function Passport() {
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-paytm-cyan/20">
           <div className="bg-paytm-navy p-6 text-center">
             <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-4 border-paytm-cyan/50">
-              <div className="w-full h-full bg-paytm-cyan/20 flex items-center justify-center text-3xl font-bold text-white">
-                {artisan?.name?.[0] || '?'}
-              </div>
+              {product?.product_images?.[0]?.enhanced_url || product?.product_images?.[0]?.raw_url ? (
+                <img
+                  src={product.product_images[0].enhanced_url || product.product_images[0].raw_url}
+                  alt={product.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-paytm-cyan/20 flex items-center justify-center text-3xl font-bold text-white">
+                  {artisan?.name?.[0] || '?'}
+                </div>
+              )}
             </div>
             <h1 className="text-2xl font-bold text-white">{product?.title}</h1>
             <p className="text-paytm-cyan mt-1">{artisan?.name} · {artisan?.region || product?.region_label}</p>

@@ -19,6 +19,7 @@ export const listingAPI = {
   update: (id, data) => api.patch(`/api/listing/${id}`, data),
   publish: (id) => api.post(`/api/listing/${id}/publish`),
   getMyListings: () => api.get('/api/listing/my'),
+  getReceivedOrders: () => api.get('/api/listing/orders/received'),
 };
 
 export const imagesAPI = {
@@ -35,6 +36,7 @@ export const passportAPI = {
 export const complianceAPI = {
   getHSN: (description) => api.post('/api/compliance/hsn', { description }),
   generateExportPDF: (productId) => api.post(`/api/compliance/export-pdf/${productId}`, {}, { responseType: 'blob' }),
+  generateDraftPDF: (docType, formData) => api.post('/api/compliance/generate-draft-pdf', { docType, formData }, { responseType: 'blob' }),
 };
 
 export const paymentsAPI = {

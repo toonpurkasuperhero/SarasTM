@@ -1,98 +1,110 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import useCartStore from '../../store/cartStore';
-import Button from '../../components/ui/Button';
-import CurrencySelector from '../../components/buyer/CurrencySelector';
+
+const SYMBOLS = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
 
 export default function Cart() {
-  const { items, currency, removeItem, getTotal } = useCartStore();
-  const symbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
+  const navigate = useNavigate();
+  const { items, removeItem, updateQty, clearCart } = useCartStore();
 
-  const getPrice = (item) => {
-    if (currency === 'INR') return item.price_inr;
-    if (currency === 'USD') return item.price_usd;
-    if (currency === 'EUR') return item.price_eur;
-    return item.price_gbp;
-  };
+  const total = items.reduce((s, item) => {
+    const cur = item.selectedCurrency || 'INR';
+    const priceKey = `price_${cur.toLowerCase()}`;
+    const price = item[priceKey] || item.price_inr || 0;
+    return s + price * item.quantity;
+  }, 0);
+
+  const currency = items[0]?.selectedCurrency || 'INR';
+  const sym = SYMBOLS[currency] || '₹';
+
+  if (items.length === 0) return (
+    <div className="min-h-screen bg-surface flex flex-col items-center justify-center text-center px-4">
+      <span className="material-symbols-outlined text-on-surface-variant mb-4" style={{ fontSize: '80px' }}>shopping_bag</span>
+      <h2 className="font-hanken text-primary mb-3" style={{ fontSize: '32px', fontWeight: '600' }}>Your cart is empty</h2>
+      <p className="text-on-surface-variant mb-8" style={{ fontFamily: 'Inter', fontSize: '18px' }}>Discover authentic Indian crafts from our artisans</p>
+      <Link to="/store" className="bg-trust-blue text-on-primary px-8 py-3 rounded-lg hover:bg-primary transition-colors font-hanken" style={{ fontSize: '18px', fontWeight: '600', textDecoration: 'none' }}>
+        Browse Marketplace
+      </Link>
+    </div>
+  );
 
   return (
-    <div className="page-container py-8 max-w-3xl mx-auto">
-      <h1 className="section-title mb-6">Your Cart</h1>
+    <div className="min-h-screen bg-surface" style={{ padding: '40px 64px' }}>
+      <div className="max-w-container-max mx-auto">
+        <h1 className="font-hanken text-primary mb-8" style={{ fontSize: '48px', lineHeight: '56px', fontWeight: '700', letterSpacing: '-0.02em' }}>Your Cart</h1>
 
-      {items.length === 0 && (
-        <div className="text-center py-24">
-          <p className="text-6xl mb-4">🛒</p>
-          <p className="text-gray-400 text-lg">Your cart is empty</p>
-          <Link to="/store" className="btn-primary inline-block mt-6">
-            Explore Crafts
-          </Link>
-        </div>
-      )}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Items */}
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            {items.map((item) => {
+              const cur = item.selectedCurrency || 'INR';
+              const priceKey = `price_${cur.toLowerCase()}`;
+              const price = item[priceKey] || item.price_inr || 0;
+              const img = item.product_images?.[0]?.enhanced_url || item.product_images?.[0]?.raw_url;
 
-      {items.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 space-y-4">
-            {items.map((item) => (
-              <div key={item.id} className="card flex gap-4">
-                <Link to={`/product/${item.id}`}>
-                  <img
-                    src={item.product_images?.[0]?.enhanced_url || item.product_images?.[0]?.raw_url}
-                    alt={item.title}
-                    className="w-24 h-24 object-cover rounded-xl flex-shrink-0"
-                  />
-                </Link>
-                <div className="flex-1 min-w-0">
-                  <Link to={`/product/${item.id}`}>
-                    <h3 className="font-semibold text-paytm-navy hover:text-paytm-cyan transition-colors line-clamp-2">{item.title}</h3>
-                  </Link>
-                  <p className="text-sm text-gray-400 mt-0.5">{item.craft_type} · {item.region_label}</p>
-                  <p className="font-bold text-paytm-navy mt-2">
-                    {symbols[currency]}{Number(getPrice(item) || 0).toLocaleString()} {currency}
-                  </p>
+              return (
+                <div key={item.id} className="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex gap-5 items-start hover:border-action-cyan transition-colors">
+                  <div className="w-24 h-24 rounded-lg overflow-hidden bg-surface-container flex-shrink-0">
+                    {img ? <img src={img} alt={item.title} className="w-full h-full object-cover" /> : (
+                      <div className="w-full h-full flex items-center justify-center"><span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: '32px' }}>image</span></div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    {item.craft_type && <p className="text-action-cyan uppercase tracking-wider mb-1" style={{ fontFamily: 'Inter', fontSize: '11px', fontWeight: '600' }}>{item.craft_type}</p>}
+                    <h3 className="font-hanken text-primary font-semibold mb-1 truncate" style={{ fontSize: '18px' }}>{item.title}</h3>
+                    {item.artisans?.name && <p className="text-on-surface-variant mb-3" style={{ fontFamily: 'Inter', fontSize: '13px' }}>by {item.artisans.name}</p>}
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => updateQty(item.id, item.quantity - 1)} className="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface hover:border-action-cyan transition-colors" style={{ fontSize: '16px' }}>−</button>
+                        <span className="font-semibold text-on-surface" style={{ fontFamily: 'Inter', fontSize: '15px', minWidth: '24px', textAlign: 'center' }}>{item.quantity}</span>
+                        <button onClick={() => updateQty(item.id, item.quantity + 1)} className="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-on-surface hover:border-action-cyan transition-colors" style={{ fontSize: '16px' }}>+</button>
+                      </div>
+                      <p className="font-hanken text-primary font-bold" style={{ fontSize: '20px' }}>{SYMBOLS[cur]}{(price * item.quantity).toLocaleString('en-IN')}</p>
+                    </div>
+                  </div>
+                  <button onClick={() => removeItem(item.id)} className="text-on-surface-variant hover:text-heritage-red transition-colors flex-shrink-0">
+                    <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>delete</span>
+                  </button>
                 </div>
-                <button
-                  onClick={() => removeItem(item.id)}
-                  className="p-2 text-gray-300 hover:text-red-500 transition-colors self-start"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <div className="space-y-4">
-            <div className="card">
-              <h2 className="font-bold text-paytm-navy mb-4">Order Summary</h2>
-              <div className="flex justify-between mb-1">
-                <span className="text-gray-500">Items ({items.length})</span>
-                <span className="font-semibold text-paytm-navy">{symbols[currency]}{Number(getTotal()).toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between mb-4">
-                <span className="text-gray-500">Shipping</span>
-                <span className="text-paytm-green font-medium">Calculated at checkout</span>
-              </div>
-              <div className="border-t border-gray-100 pt-4 flex justify-between mb-6">
-                <span className="font-bold text-paytm-navy">Total</span>
-                <div className="text-right">
-                  <div className="text-2xl font-extrabold text-paytm-navy">{symbols[currency]}{Number(getTotal()).toLocaleString()}</div>
-                  <div className="text-xs text-gray-400">{currency}</div>
+          {/* Order Summary */}
+          <div>
+            <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 sticky top-24">
+              <h2 className="font-hanken text-primary mb-4" style={{ fontSize: '20px', fontWeight: '600' }}>Order Summary</h2>
+              <div className="flex flex-col gap-3 mb-5">
+                <div className="flex justify-between text-on-surface-variant" style={{ fontFamily: 'Inter', fontSize: '15px' }}>
+                  <span>Subtotal ({items.length} item{items.length !== 1 ? 's' : ''})</span>
+                  <span className="font-semibold text-on-surface">{sym}{total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
+                </div>
+                <div className="flex justify-between text-on-surface-variant" style={{ fontFamily: 'Inter', fontSize: '15px' }}>
+                  <span>Escrow Protection</span><span className="text-green-600 font-semibold">Included</span>
+                </div>
+                <div className="border-t border-outline-variant pt-3 flex justify-between font-bold text-on-surface" style={{ fontFamily: 'Hanken Grotesk', fontSize: '18px' }}>
+                  <span>Total</span>
+                  <span>{sym}{total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
                 </div>
               </div>
-              <Link to="/checkout">
-                <Button size="lg" className="w-full">Proceed to Checkout</Button>
-              </Link>
-            </div>
-
-            <div className="card">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-semibold text-paytm-navy">Display Currency</span>
+              <button onClick={() => navigate('/checkout')}
+                className="w-full bg-trust-blue text-on-primary py-4 rounded-lg hover:bg-primary transition-colors font-hanken font-semibold flex items-center justify-center gap-2 shadow-sm"
+                style={{ fontSize: '18px' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '22px' }}>lock</span>
+                Secure Checkout
+              </button>
+              <p className="text-on-surface-variant text-center mt-3" style={{ fontFamily: 'Inter', fontSize: '12px' }}>Funds held in escrow until delivery confirmed</p>
+              <div className="mt-4 pt-4 border-t border-outline-variant">
+                <div className="flex items-center gap-2 text-on-surface-variant justify-center" style={{ fontFamily: 'Inter', fontSize: '12px' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>verified</span>
+                  All items verified authentic by Saras AI
+                </div>
               </div>
-              <CurrencySelector />
             </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

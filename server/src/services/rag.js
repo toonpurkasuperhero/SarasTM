@@ -45,20 +45,53 @@ async function initializeRAG() {
   console.log('HSN RAG initialized with', rows.length, 'entries');
 }
 
+// Keyword-based offline HSN lookup for when embeddings are unavailable
+const KEYWORD_HSN = [
+  { keywords: ['silk', 'saree', 'sari', 'kanchipuram', 'banarasi'], code: '50072000', description: 'Woven fabrics of silk or silk waste', confidence: 'high' },
+  { keywords: ['painting', 'madhubani', 'warli', 'canvas', 'art', 'pattachitra', 'miniature'], code: '97010000', description: 'Original paintings, drawings and pastels', confidence: 'high' },
+  { keywords: ['pottery', 'ceramic', 'clay', 'terracotta', 'blue pottery'], code: '69149000', description: 'Other ceramic articles', confidence: 'high' },
+  { keywords: ['wood', 'wooden', 'walnut', 'carving', 'carved', 'furniture'], code: '44219090', description: 'Other articles of wood', confidence: 'high' },
+  { keywords: ['cotton', 'fabric', 'textile', 'weave', 'handloom', 'dhoti'], code: '52089000', description: 'Other woven fabrics of cotton', confidence: 'high' },
+  { keywords: ['jewellery', 'jewelry', 'silver', 'gold', 'necklace', 'bracelet', 'ring'], code: '71171990', description: 'Other imitation jewellery', confidence: 'high' },
+  { keywords: ['shawl', 'pashmina', 'wool', 'embroidery', 'kashmiri'], code: '62149010', description: 'Shawls, scarves, mufflers — of wool', confidence: 'high' },
+  { keywords: ['brass', 'bronze', 'metal', 'dhokra', 'statue', 'idol'], code: '83062990', description: 'Statuettes and ornaments, of base metal', confidence: 'high' },
+  { keywords: ['basket', 'bamboo', 'cane', 'rattan', 'wicker', 'jute'], code: '46021990', description: 'Other basketwork and wickerwork', confidence: 'medium' },
+  { keywords: ['leather', 'bag', 'purse', 'sandal', 'shoe', 'footwear'], code: '42029900', description: 'Other containers of leather', confidence: 'medium' },
+];
+
+function keywordHSNLookup(description) {
+  const lower = description.toLowerCase();
+  for (const entry of KEYWORD_HSN) {
+    if (entry.keywords.some(k => lower.includes(k))) {
+      return { code: entry.code, description: entry.description, confidence: entry.confidence, explanation: `Matched keywords in: "${description}"` };
+    }
+  }
+  return { code: '97060000', description: 'Antiques of an age exceeding one hundred years / Handicrafts (general)', confidence: 'low', explanation: 'No specific match found — defaulting to general handicrafts code' };
+}
+
 async function findHSNCode(description) {
-  await initializeRAG();
+  // If embedding is available, try vector search first
   const queryEmbedding = await generateEmbedding(description);
 
-  const { data: matches, error } = await supabase.rpc('match_hsn_codes', {
-    query_embedding: queryEmbedding,
-    match_count: 5,
-  });
+  if (queryEmbedding) {
+    try {
+      await initializeRAG();
+      const { data: matches, error } = await supabase.rpc('match_hsn_codes', {
+        query_embedding: queryEmbedding,
+        match_count: 5,
+      });
 
-  if (error || !matches?.length) {
-    return { code: 'Unable to determine', description: '', confidence: 'low', explanation: 'No matches found in HSN database' };
+      if (!error && matches?.length) {
+        return await generateHSNReasoning(description, matches);
+      }
+    } catch (e) {
+      console.warn('Vector HSN search failed:', e.message);
+    }
   }
 
-  return await generateHSNReasoning(description, matches);
+  // Offline keyword fallback — always works
+  console.log('[HSN] Using offline keyword fallback');
+  return keywordHSNLookup(description);
 }
 
 module.exports = { findHSNCode, initializeRAG };

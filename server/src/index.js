@@ -44,7 +44,10 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, async () => {
   console.log(`SarasTM API running on port ${PORT}`);
-  initializeRAG().catch(console.error);
+  initializeRAG().catch((err) => {
+    console.warn('[RAG] Skipping HSN initialization at startup:', err.message);
+    console.warn('[RAG] HSN lookup will retry on first compliance request.');
+  });
 });
 
 module.exports = app;

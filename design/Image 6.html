@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Artisan Dashboard - SarasTM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e0e3e6",
+                    "surface": "#f7f9fc",
+                    "deep-ink": "#000000",
+                    "primary": "#001645",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d8dadd",
+                    "outline-variant": "#c4c6d2",
+                    "on-secondary-container": "#004f69",
+                    "inverse-surface": "#2d3133",
+                    "surface-container-high": "#e6e8eb",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#3e0002",
+                    "primary-fixed-dim": "#b3c5ff",
+                    "secondary": "#006686",
+                    "on-primary-fixed": "#001849",
+                    "tertiary-container": "#650006",
+                    "background": "#f7f9fc",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#93000d",
+                    "surface-gray": "#F4F4F4",
+                    "outline": "#747682",
+                    "surface-container": "#eceef1",
+                    "on-surface": "#191c1e",
+                    "on-error": "#ffffff",
+                    "secondary-fixed": "#c0e8ff",
+                    "on-surface-variant": "#444651",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#002970",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-variant": "#e0e3e6",
+                    "surface-container-low": "#f2f4f7",
+                    "inverse-on-surface": "#eff1f4",
+                    "primary-fixed": "#dae1ff",
+                    "heritage-red": "#E31E24",
+                    "on-background": "#191c1e",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#004d66",
+                    "trust-blue": "#002970",
+                    "surface-tint": "#3f5ba3",
+                    "tertiary-fixed": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb4ab",
+                    "on-secondary-fixed": "#001e2b",
+                    "on-primary-container": "#7893df",
+                    "surface-bright": "#f7f9fc",
+                    "action-cyan": "#00BAF2",
+                    "on-primary-fixed-variant": "#25438a",
+                    "on-tertiary-fixed": "#410002",
+                    "secondary-fixed-dim": "#71d2ff",
+                    "on-tertiary-container": "#ff6157",
+                    "inverse-primary": "#b3c5ff",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#2bc6ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "64px",
+                    "unit": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": [
+                            "Hanken Grotesk"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "title-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Hanken Grotesk"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "title-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen flex">
+<!-- SideNavBar -->
+<nav aria-label="Sidebar Navigation" class="bg-surface-container-low border-r border-outline-variant h-screen w-64 fixed left-0 top-0 flex flex-col p-4 gap-2 z-40 hidden md:flex">
+<!-- Header -->
+<div class="mb-8 mt-4 flex flex-col items-center">
+<div class="w-16 h-16 rounded-full overflow-hidden mb-4 border-2 border-primary-container relative">
+<img alt="Artisan Profile" class="w-full h-full object-cover" data-alt="Close up professional portrait of an Indian artisan in a well lit studio setting. Warm natural light illuminates their face, showing pride and expertise. The background subtly hints at a clean, modern workshop. The overall mood is confident and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCne56fRZc05b_fWzOsstgZf1LgTYet5Km0Dr-8JVu2iAE3gVBzbUpfZffUmKLCyTyfbAwtd8Y3T8AQMMXXNIa6XJFA05gIU4j6mF15nLuh5U_WoeOfiLtMQjC9nRsd82ozNkgEqOiYmorCAsAOLxpG5uXbkBI06rDjscTE1ZP2FSMkzuA5ARtII1sjUFGoriVwpLQqmRfmixcq30jTJn-SoQEUAqol8qBY1NXM3sA26WwweI469hethg"/>
+<div class="absolute bottom-0 right-0 bg-heritage-red rounded-full p-1 border-2 border-surface-container-low">
+<span class="material-symbols-outlined text-white text-[10px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+<h2 class="font-headline-lg text-primary text-center">Artisan Portal</h2>
+<span class="font-label-sm text-label-sm text-action-cyan uppercase tracking-wider mt-1">Verified by Saras AI</span>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-1 flex-1">
+<a class="bg-primary-container text-on-primary-container rounded-lg font-bold flex items-center gap-3 px-4 py-3 scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">mic_none</span>
+<span>Voice Listing</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span>Orders</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span>Logistics</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Payments</span>
+</a>
+</div>
+<!-- CTA -->
+<button class="bg-primary-container text-on-primary w-full py-3 rounded-lg font-body-md font-bold mt-4 hover:bg-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">add</span>
+            New Listing
+        </button>
+<!-- Footer Links -->
+<div class="mt-4 pt-4 border-t border-outline-variant flex flex-col gap-1">
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface flex items-center gap-3 px-4 py-2 rounded-lg text-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span>Support</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface flex items-center gap-3 px-4 py-2 rounded-lg text-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop bg-surface min-h-screen">
+<!-- Top Bar for Mobile (Hidden on Desktop) -->
+<header class="md:hidden flex justify-between items-center mb-8 border-b border-outline-variant pb-4">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">Artisan Portal</h1>
+<button class="text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<div class="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Core Actions & Listings -->
+<div class="lg:col-span-8 flex flex-col gap-8">
+<!-- Voice Listing Hero Card -->
+<section class="bg-white rounded-xl border border-surface-container-highest overflow-hidden relative shadow-sm">
+<!-- Decorative subtle pattern background -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, #001645 1px, transparent 0); background-size: 24px 24px;"></div>
+<div class="p-8 relative z-10 flex flex-col items-center text-center">
+<h2 class="font-title-md text-title-md text-primary mb-2">Record Your Product</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 max-w-md">Describe your latest creation in your own language. Saras AI will translate, optimize, and list it globally.</p>
+<button class="w-24 h-24 rounded-full bg-primary-container text-white flex items-center justify-center shadow-lg hover:scale-105 transition-transform duration-300 group relative">
+<!-- Pulse effect rings -->
+<div class="absolute inset-0 rounded-full border border-action-cyan opacity-0 group-hover:animate-ping"></div>
+<span class="material-symbols-outlined text-4xl group-hover:text-action-cyan transition-colors" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+<p class="mt-4 font-label-sm text-label-sm text-primary uppercase tracking-wider">Tap to Speak</p>
+</div>
+<div class="bg-surface-container-low px-6 py-4 border-t border-surface-container-highest flex justify-between items-center">
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-[16px]">translate</span>
+<span>Supports 24+ Indian Languages</span>
+</div>
+<a class="text-action-cyan font-semibold text-sm hover:underline" href="#">View Guidelines</a>
+</div>
+</section>
+<!-- Recent Listings -->
+<section>
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md text-primary">Recent Listings</h3>
+<a class="text-sm font-semibold text-action-cyan hover:underline" href="#">View All</a>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Listing Item 1 -->
+<div class="bg-white p-4 rounded-lg border border-surface-container-highest flex gap-6 items-center shadow-sm">
+<div class="w-24 h-24 rounded bg-surface-container-high overflow-hidden shrink-0">
+<img alt="Madhubani Painting" class="w-full h-full object-cover" data-alt="Detailed high quality photograph of an intricate Madhubani painting on handmade paper. The painting features traditional Indian motifs, natural dyes in vibrant reds, yellows, and blacks. Clean studio lighting highlights the texture of the paper and the fine brushwork. The image is cropped square and centered." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_zC6I7lxMyV4wVyameV9gPuAVUvDtLqQ1bO1a-hjtL6qXiTSwYGRK2225Rv3sIdL6_i8ALjALi4Zdz8XPuuMJrgmCKwt-j_zZZlVmWdKX16-Q1pJfqqPhPylgxhfcywa3w0CxG-EfHOofynWZcvEgaAWI0PyRfd0V859RjUmqoSFCKlsKCWJg6w5giP9nFqJtEgxWAJjzF3cX3y1d4CumKS3VYOvb9ekyu2SMGy6jobrAoBiWzigY9A"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Tree of Life Madhubani Painting</h4>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 text-action-cyan font-label-sm text-[10px] uppercase tracking-wider border border-blue-100">
+<span class="material-symbols-outlined text-[12px] animate-spin">autorenew</span>
+                                        AI Optimizing
+                                    </span>
+</div>
+<p class="text-sm text-on-surface-variant mb-2">Natural dyes on handmade paper</p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 bg-surface-gray text-deep-ink text-xs rounded">Mithila, BR</span>
+<span class="px-2 py-0.5 bg-surface-gray text-deep-ink text-xs rounded">Painting</span>
+</div>
+</div>
+</div>
+<!-- Listing Item 2 -->
+<div class="bg-white p-4 rounded-lg border border-surface-container-highest flex gap-6 items-center shadow-sm">
+<div class="w-24 h-24 rounded bg-surface-container-high overflow-hidden shrink-0">
+<img alt="Silk Saree" class="w-full h-full object-cover" data-alt="Exquisite Kanchipuram silk saree gracefully folded, displaying a rich zari border with intricate gold woven patterns against a deep contrasting base color. Soft, diffused lighting enhances the sheen of the pure silk fabric. Professional studio shot emphasizing texture and quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6Eq7Csk0soQiOx1VRAJU9Y7w01qdWxfMZ5r-hspgehd3gcC0LhzA4-gFI5-gS27C8glSDEuaHm4WH3JKVoUlCZq6PCqgRmjxnybMRiCqbSy-6pBn0T5J14UHzXsY3um-F30GxNQfuhRMXuCltXTJT9zyEO4puG6eN9gMjNX5eDECf32MSGhQCz0mSxdK2QqgAy1b3rPMva7AL1r5NnRolcz8n53mgeMiA1-y0mdF9Up8AyPK8WuS2sA"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Kanchipuram Bridal Silk Saree</h4>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 text-green-700 font-label-sm text-[10px] uppercase tracking-wider border border-green-200">
+<span class="material-symbols-outlined text-[12px]">public</span>
+                                        Live in London
+                                    </span>
+</div>
+<p class="text-sm text-on-surface-variant mb-2">Pure mulberry silk with gold zari</p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 bg-surface-gray text-deep-ink text-xs rounded">Kanchipuram, TN</span>
+<span class="px-2 py-0.5 bg-surface-gray text-deep-ink text-xs rounded">Textile</span>
+</div>
+</div>
+</div>
+<!-- Listing Item 3 -->
+<div class="bg-white p-4 rounded-lg border border-surface-container-highest flex gap-6 items-center shadow-sm">
+<div class="w-24 h-24 rounded bg-surface-container-high overflow-hidden shrink-0">
+<img alt="Terracotta Pot" class="w-full h-full object-cover" data-alt="Handcrafted terracotta pottery vase with detailed tribal engravings. The vase has an earthy red-brown hue, placed on a clean white surface with soft, directional lighting highlighting the etched patterns. High quality, minimalist product photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgyHpnfWg6Znt71CSEhXDICZMve_lSwPDvn-BJsUalQ5s1oCAZ-QF61ipQIiM1FopwQU6w6MRfZjW_hi6a_2oUF_ewF5u3RyU6nskGrAuArfAfwl22ef1VjDrrZ830T8X-8uWu_nP6u2J0jAu-IPSQXWBEISqwA-u5zKrxE1-pDWBfo6tGUthk-23eQzYR9WYYCozbTB2YYJm-LTLqwF-H1m_bn_Q-wafZC2YK3y7-tLglFYhAPVQYZQ"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Engraved Terracotta Vase</h4>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-orange-50 text-orange-600 font-label-sm text-[10px] uppercase tracking-wider border border-orange-200">
+<span class="material-symbols-outlined text-[12px]">description</span>
+                                        Compliance Drafted
+                                    </span>
+</div>
+<p class="text-sm text-on-surface-variant mb-2">Hand-thrown clay with tribal motifs</p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 bg-surface-gray text-deep-ink text-xs rounded">Bishnupur, WB</span>
+<span class="px-2 py-0.5 bg-surface-gray text-deep-ink text-xs rounded">Ceramics</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Analytics Sidebar -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Global Sales Widget -->
+<div class="bg-white rounded-xl border border-surface-container-highest p-6 shadow-sm">
+<h3 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-4">Total Global Sales</h3>
+<div class="flex items-end gap-2 mb-2">
+<span class="font-display-lg text-[40px] leading-tight font-bold text-primary">₹1,42,500</span>
+<span class="text-sm text-green-600 font-semibold mb-2 flex items-center"><span class="material-symbols-outlined text-[16px]">trending_up</span> +12%</span>
+</div>
+<!-- Multi-Currency Widget (Simplified) -->
+<div class="flex gap-4 text-xs text-on-surface-variant mt-2 p-2 bg-surface-container-low rounded">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase">USD</span>
+<span class="font-semibold text-on-surface">~$1,710</span>
+</div>
+<div class="w-px bg-outline-variant h-full"></div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase">EUR</span>
+<span class="font-semibold text-on-surface">~€1,580</span>
+</div>
+<div class="w-px bg-outline-variant h-full"></div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase">GBP</span>
+<span class="font-semibold text-on-surface">~£1,350</span>
+</div>
+</div>
+</div>
+<!-- Orders by Country -->
+<div class="bg-white rounded-xl border border-surface-container-highest p-6 shadow-sm">
+<h3 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-4">Top Markets</h3>
+<div class="flex flex-col gap-4">
+<!-- Country Bar 1 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="font-semibold">United States</span>
+<span>45%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-action-cyan rounded-full" style="width: 45%;"></div>
+</div>
+</div>
+<!-- Country Bar 2 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="font-semibold">United Kingdom</span>
+<span>30%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 30%;"></div>
+</div>
+</div>
+<!-- Country Bar 3 -->
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="font-semibold">Germany</span>
+<span>15%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 15%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Logistics Status -->
+<div class="bg-white rounded-xl border border-surface-container-highest p-6 shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Logistics Alert</h3>
+<span class="material-symbols-outlined text-outline">local_shipping</span>
+</div>
+<div class="bg-orange-50 border border-orange-100 rounded-lg p-4 flex gap-3">
+<span class="material-symbols-outlined text-orange-600">warning</span>
+<div>
+<h4 class="font-semibold text-sm text-orange-800 mb-1">Action Required</h4>
+<p class="text-xs text-orange-700">2 orders ready for pickup. Schedule Saras courier collection.</p>
+<button class="mt-3 text-xs font-bold text-orange-800 border border-orange-300 px-3 py-1.5 rounded hover:bg-orange-100 transition-colors">Schedule Now</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
